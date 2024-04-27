@@ -3,6 +3,7 @@
 namespace DiplomaProject\Core;
 
 use DiplomaProject\Core\Modules\Http;
+use DiplomaProject\Core\Modules\Security;
 use DiplomaProject\Core\Modules\Viewer;
 
 /**
@@ -13,6 +14,7 @@ class Core
     private static self $current_app;
     private Viewer $viewer;
     private Http $http;
+    private Security $security;
 
     private string $root;
 
@@ -42,6 +44,9 @@ class Core
         $this->http->configure($_SERVER['SERVER_NAME']);
 
         $this->viewer = new Viewer();
+
+        $this->security = new Security();
+        $this->security->configure('lsduDfR5gviY*4ad287u6sfh');
     }
 
     public function getViewer(): Viewer
@@ -52,6 +57,11 @@ class Core
     public function getHttp(): Http
     {
         return $this->http;
+    }
+
+    public function getSecurity(): Security
+    {
+        return $this->security;
     }
 
     private function processRequest()
