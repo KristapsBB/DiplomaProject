@@ -44,6 +44,32 @@ class Http
         header("Location: {$url}", true, $code);
     }
 
+    public function isPost(): bool
+    {
+        return ('POST' === $_SERVER['REQUEST_METHOD']);
+    }
+
+    public function isGet(): bool
+    {
+        return ('GET' === $_SERVER['REQUEST_METHOD']);
+    }
+
+    /**
+     * get var from $_GET by $var_name
+     */
+    public function get(string $var_name)
+    {
+        return $_GET[$var_name] ?? null;
+    }
+
+    /**
+     * get var from $_POST by $var_name
+     */
+    public function post(string $var_name)
+    {
+        return $_POST[$var_name] ?? null;
+    }
+
     public function setCookie(string $name, $value, int $expires = 0): bool
     {
         return setcookie($name, $value, $expires);
