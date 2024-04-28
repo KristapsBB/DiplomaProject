@@ -91,14 +91,16 @@ class DataBase
     {
         $query = $this->connection->prepare($query_string);
 
-        $types = '';
-        $values = [];
-        foreach ($fields as $field) {
-            $types .= self::getMysqlType($field['type']);
-            $values[] = $field['value'];
-        }
+        if (!empty($fields)) {
+            $types = '';
+            $values = [];
+            foreach ($fields as $field) {
+                $types .= self::getMysqlType($field['type']);
+                $values[] = $field['value'];
+            }
 
-        $query->bind_param($types, ...$values);
+            $query->bind_param($types, ...$values);
+        }
 
         $is_complete = $query->execute();
 
