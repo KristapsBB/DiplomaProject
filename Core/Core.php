@@ -19,6 +19,7 @@ class Core
     private Http $http;
     private Security $security;
     private DataBase $db;
+    private Authentication $authentication;
 
     private string $root;
 
@@ -50,7 +51,8 @@ class Core
         $this->viewer = new Viewer();
 
         $this->security = new Security();
-        $this->security->configure('lsduDfR5gviY*4ad287u6sfh');
+        // $this->security->configure('lsduDfR5gviY*4ad287u6sfh');
+        $this->security->configure('lsduDfR5gviY4ad27u6sfh');
 
         $db_config = [
             'hostname' => 'localhost', // 127.0.0.1
@@ -61,6 +63,9 @@ class Core
 
         $this->db = new DataBase();
         $this->db->configure($db_config);
+
+        $this->authentication = new Authentication();
+        $this->authentication->configure(User::class, 20);
     }
 
     public function getViewer(): Viewer
@@ -81,6 +86,11 @@ class Core
     public function getDb(): DataBase
     {
         return $this->db;
+    }
+
+    public function getAuthentication(): Authentication
+    {
+        return $this->authentication;
     }
 
     private function processRequest()

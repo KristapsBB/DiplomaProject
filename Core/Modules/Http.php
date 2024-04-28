@@ -43,4 +43,20 @@ class Http
     {
         header("Location: {$url}", true, $code);
     }
+
+    public function setCookie(string $name, $value, int $expires = 0): bool
+    {
+        return setcookie($name, $value, $expires);
+    }
+
+    public function getCookie(string $name)
+    {
+        $value = null;
+
+        if (array_key_exists($name, $_COOKIE)) {
+            $value = $_COOKIE[$name];
+        }
+
+        return $value;
+    }
 }
