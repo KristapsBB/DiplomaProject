@@ -2,9 +2,12 @@
 
 namespace DiplomaProject\Core;
 
+use DiplomaProject\Core\Modules\Authentication;
+use DiplomaProject\Core\Modules\DataBase;
 use DiplomaProject\Core\Modules\Http;
 use DiplomaProject\Core\Modules\Security;
 use DiplomaProject\Core\Modules\Viewer;
+use DiplomaProject\Models\User;
 
 /**
  * Singleton & Dependency Injection
@@ -15,6 +18,7 @@ class Core
     private Viewer $viewer;
     private Http $http;
     private Security $security;
+    private DataBase $db;
 
     private string $root;
 
@@ -47,6 +51,16 @@ class Core
 
         $this->security = new Security();
         $this->security->configure('lsduDfR5gviY*4ad287u6sfh');
+
+        $db_config = [
+            'hostname' => 'localhost', // 127.0.0.1
+            'username' => 'diploma_project_admin',
+            'password' => '123',
+            'database' => 'diploma_project_db',
+        ];
+
+        $this->db = new DataBase();
+        $this->db->configure($db_config);
     }
 
     public function getViewer(): Viewer
@@ -62,6 +76,11 @@ class Core
     public function getSecurity(): Security
     {
         return $this->security;
+    }
+
+    public function getDb(): DataBase
+    {
+        return $this->db;
     }
 
     private function processRequest()
