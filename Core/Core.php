@@ -5,6 +5,7 @@ namespace DiplomaProject\Core;
 use DiplomaProject\Core\Modules\Authentication;
 use DiplomaProject\Core\Modules\DataBase;
 use DiplomaProject\Core\Modules\Http;
+use DiplomaProject\Core\Modules\Router;
 use DiplomaProject\Core\Modules\Security;
 use DiplomaProject\Core\Modules\Viewer;
 use DiplomaProject\Models\User;
@@ -20,6 +21,7 @@ class Core
     private Security $security;
     private DataBase $db;
     private Authentication $authentication;
+    private Router $router;
 
     private string $root;
 
@@ -66,6 +68,14 @@ class Core
 
         $this->authentication = new Authentication();
         $this->authentication->configure(User::class, 20);
+
+        $controller_map = [
+            'authentication' => \DiplomaProject\Controllers\Authentication::class,
+            'login' => \DiplomaProject\Controllers\Authentication::class,
+        ];
+
+        $this->router = new Router();
+        $this->router->configure($controller_map);
     }
 
     public function getViewer(): Viewer
@@ -93,13 +103,22 @@ class Core
         return $this->authentication;
     }
 
+    public function getRouter(): Router
+    {
+        return $this->router;
+    }
+
     private function processRequest()
     {
         /**
-         * selecting controller and method
+         * parsing the request URL to select controller and method
          */
-        $controller_class = 'DiplomaProject\Controllers\Authentication';
-        $method_name = 'login';
+        $uri = str_replace("?{$_SERVER['QUERY_STRING']}", '', $_SERVER['REQUEST_URI']);
+
+        $this->getRouter()->setRoutePath($uri);
+        $this->getRouter()->parseRoute();
+        $controller_class = $this->getRouter()->getController();
+        $method_name      = $this->getRouter()->getMethod();
 
         if (!class_exists($controller_class) || !method_exists($controller_class, $method_name)) {
             return $this->getViewer()->showView('error', ['error' => 'Page not found'], 404);
