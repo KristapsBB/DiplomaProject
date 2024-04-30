@@ -2,26 +2,13 @@
 
 namespace DiplomaProject\Core;
 
-use DiplomaProject\Core\Modules\Authentication;
-use DiplomaProject\Core\Modules\DataBase;
-use DiplomaProject\Core\Modules\Http;
-use DiplomaProject\Core\Modules\Router;
-use DiplomaProject\Core\Modules\Security;
-use DiplomaProject\Core\Modules\Viewer;
-use DiplomaProject\Models\User;
-
 /**
  * Singleton & Dependency Injection
  */
 class Core
 {
     private static self $current_app;
-    private Viewer $viewer;
-    private Http $http;
-    private Security $security;
-    private DataBase $db;
-    private Authentication $authentication;
-    private Router $router;
+    private array $modules = [];
 
     private string $root;
 
@@ -43,69 +30,90 @@ class Core
         return $this->root;
     }
 
-    private function configure()
+    private function configure(string $config_name)
     {
         $this->root = dirname(__DIR__) . '/';
 
-        $this->http = new Http();
-        $this->http->configure($_SERVER['SERVER_NAME']);
+        $app_config = require_once($this->root . 'app-configuration.php');
 
-        $this->viewer = new Viewer();
+        foreach ($app_config[$config_name] as $module_name => $module_config) {
+            $module_class = $module_config['class'] ?? '';
 
-        $this->security = new Security();
-        // $this->security->configure('lsduDfR5gviY*4ad287u6sfh');
-        $this->security->configure('lsduDfR5gviY4ad27u6sfh');
+            if (empty($module_class) || !is_string($module_class) || !class_exists($module_class)) {
+                throw new \Exception(
+                    "class '$module_class' not found in app-configuration to the module '$module_name'"
+                );
+            }
 
-        $db_config = [
-            'hostname' => 'localhost', // 127.0.0.1
-            'username' => 'diploma_project_admin',
-            'password' => '123',
-            'database' => 'diploma_project_db',
-        ];
-
-        $this->db = new DataBase();
-        $this->db->configure($db_config);
-
-        $this->authentication = new Authentication();
-        $this->authentication->configure(User::class, 20);
-
-        $controller_map = [
-            'authentication' => \DiplomaProject\Controllers\Authentication::class,
-            'login' => \DiplomaProject\Controllers\Authentication::class,
-        ];
-
-        $this->router = new Router();
-        $this->router->configure($controller_map);
+            $module = new $module_class();
+            $module->configure($module_config['params'] ?? []);
+            $this->modules[$module_name] = $module;
+        }
     }
 
-    public function getViewer(): Viewer
+    private function getModule(string $module_name)
     {
-        return $this->viewer;
+        if (!array_key_exists($module_name, $this->modules)) {
+            return null;
+        }
+
+        $r = $this->modules[$module_name];
+
+        return $r;
     }
 
-    public function getHttp(): Http
+    /**
+     * returns viewer module
+     * @return \DiplomaProject\Core\Modules\Viewer
+     */
+    public function getViewer()
     {
-        return $this->http;
+        return $this->getModule('viewer');
     }
 
-    public function getSecurity(): Security
+    /**
+     * returns http module
+     * @return \DiplomaProject\Core\Modules\Http
+     */
+    public function getHttp()
     {
-        return $this->security;
+        return $this->getModule('http');
     }
 
-    public function getDb(): DataBase
+    /**
+     * returns security module
+     * @return \DiplomaProject\Core\Modules\Security
+     */
+    public function getSecurity()
     {
-        return $this->db;
+        return $this->getModule('security');
     }
 
-    public function getAuthentication(): Authentication
+    /**
+     * returns db module
+     * @return \DiplomaProject\Core\Modules\DataBase
+     */
+    public function getDb()
     {
-        return $this->authentication;
+        return $this->getModule('db');
     }
 
-    public function getRouter(): Router
+    /**
+     * returns authentication module
+     * @return \DiplomaProject\Core\Modules\Authentication
+     */
+    public function getAuthentication()
     {
-        return $this->router;
+        return $this->getModule('authentication');
+    }
+
+    /**
+     * returns router module
+     * @return \DiplomaProject\Core\Modules\Router
+     */
+    public function getRouter()
+    {
+        return $this->getModule('router');
     }
 
     private function processRequest()
@@ -152,9 +160,9 @@ class Core
         }
     }
 
-    public function run()
+    public function run(string $config_name = 'default')
     {
-        $this->configure();
+        $this->configure($config_name);
 
         try {
             $this->processRequest();

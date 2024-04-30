@@ -6,9 +6,9 @@ class Security
 {
     private string $salt = '';
 
-    public function configure(string $salt)
+    public function configure(array $params)
     {
-        $this->setSalt($salt);
+        $this->setSalt($params['salt']);
     }
 
     public function setSalt(string $salt)

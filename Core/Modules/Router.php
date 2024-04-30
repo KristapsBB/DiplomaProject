@@ -10,9 +10,9 @@ class Router
     private string $current_controller = '';
     private string $current_method = '';
 
-    public function configure(array $controller_map)
+    public function configure(array $params)
     {
-        $this->setControllerMap($controller_map);
+        $this->setControllerMap($params['controller_map']);
     }
 
     public function setControllerMap(array $controller_map)

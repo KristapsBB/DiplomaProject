@@ -18,10 +18,10 @@ class Authentication
      */
     private int $token_lifetime = 0;
 
-    public function configure(string $user_class, int $token_lifetime)
+    public function configure(array $params)
     {
-        $this->setUserClass($user_class);
-        $this->setTokenLifetime($token_lifetime);
+        $this->setUserClass($params['user_class']);
+        $this->setTokenLifetime($params['token_lifetime']);
     }
 
     /**

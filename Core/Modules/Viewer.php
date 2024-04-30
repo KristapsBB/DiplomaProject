@@ -9,6 +9,10 @@ class Viewer
     public array $params = [];
     public int $code;
 
+    public function configure(array $params)
+    {
+    }
+
     public function showView(string $view_name, array $params, int $code = 200)
     {
         $this->params = $params;

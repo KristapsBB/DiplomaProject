@@ -16,12 +16,15 @@ class DataBase
     private \mysqli_result | false $last_query_result_obj;
     private ?array $last_query_result = null;
 
-    public function configure(array $fields)
+    public function configure(array $params)
     {
-        $this->config['hostname'] = $fields['hostname'];
-        $this->config['username'] = $fields['username'];
-        $this->config['password'] = $fields['password'];
-        $this->config['database'] = $fields['database'];
+        foreach ($this->config as $field_name => $value) {
+            if (!array_key_exists($field_name, $params) || empty($params[$field_name])) {
+                throw new \Exception("\$db_config['{$field_name}'] is empty");
+            }
+
+            $this->config[$field_name] = $params[$field_name];
+        }
 
         $result = $this->connect(
             $this->config['hostname'],

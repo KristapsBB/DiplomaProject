@@ -6,7 +6,12 @@ class Http
 {
     public $base_url = '';
 
-    public function configure(string $base_url)
+    public function configure(array $params)
+    {
+        $this->setBaseUrl($params['base_url']);
+    }
+
+    private function setBaseUrl(string $base_url)
     {
         $this->base_url = $base_url;
     }
