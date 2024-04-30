@@ -5,6 +5,8 @@ use DiplomaProject\Core\Modules\Viewer;
 /**
  * @var Viewer $this
  */
+
+$this->page_params['title'] = 'Login page';
 ?>
 
 <div class="login-page">

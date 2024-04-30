@@ -19,6 +19,10 @@ return [
         ],
         'viewer' => [
             'class' => \DiplomaProject\Core\Modules\Viewer::class,
+            'params' => [
+                'layout_path'       => 'main-layout',
+                'max_nesting_depth' => 10,
+            ],
         ],
         'security' => [
             'class' => \DiplomaProject\Core\Modules\Security::class,

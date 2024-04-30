@@ -129,7 +129,7 @@ class Core
         $method_name      = $this->getRouter()->getMethod();
 
         if (!class_exists($controller_class) || !method_exists($controller_class, $method_name)) {
-            return $this->getViewer()->showView('error', ['error' => 'Page not found'], 404);
+            return $this->getViewer()->showLayout('error', ['error' => 'Page not found'], 404);
         }
 
         /**
@@ -147,7 +147,7 @@ class Core
                 $params    = $result['params'];
                 $code      = $result['code'];
 
-                return $this->getViewer()->showView($view_name, $params, $code);
+                return $this->getViewer()->showLayout($view_name, $params, $code);
                 break;
             case 'url':
                 $uri        = $result['uri'];
