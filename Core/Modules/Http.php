@@ -16,7 +16,7 @@ class Http
         $this->base_url = $base_url;
     }
 
-    public function generateUrl(string $uri, array $get_params)
+    public function generateUrl(string $uri, ?array $get_params = null)
     {
         $url = '';
         $url .= $uri;
@@ -36,6 +36,7 @@ class Http
             function ($key, $value) {
                 return "{$key}={$value}";
             },
+            array_keys($get_params),
             $get_params
         );
 
