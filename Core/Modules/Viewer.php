@@ -3,8 +3,9 @@
 namespace DiplomaProject\Core\Modules;
 
 use DiplomaProject\Core\Core;
+use DiplomaProject\Core\Module;
 
-class Viewer
+class Viewer extends Module
 {
     private string $layout_path;
     private array $params_stack = [];
@@ -90,5 +91,31 @@ class Viewer
     public function getPathToView(string $view_name): string
     {
         return Core::getCurrentApp()->getAppRoot() . "Views/{$view_name}.php";
+    }
+
+    public function onHead(callable $handler, string $group_name = 'default')
+    {
+        $this->on('head', $handler, $group_name);
+    }
+
+    /**
+     * triggers the "head" event, used in the layout
+     */
+    private function head()
+    {
+        $this->trigger('head');
+    }
+
+    public function onFooter(callable $handler, string $group_name = 'default')
+    {
+        $this->on('footer', $handler, $group_name);
+    }
+
+    /**
+     * triggers the "footer" event, used in the layout
+     */
+    private function footer()
+    {
+        $this->trigger('footer');
     }
 }
