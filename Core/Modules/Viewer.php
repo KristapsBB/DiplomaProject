@@ -26,6 +26,27 @@ class Viewer extends Module
         $this->setMaxNestingDepth($config_params['max_nesting_depth']);
     }
 
+    public function initSystemAssets()
+    {
+        $asset_manager = Core::getCurrentApp()->getAssetManager();
+
+        $asset_manager->registerStyle('system-normalize', '/assets/css/normalize.css');
+        $asset_manager->registerStyle('system-reset', '/assets/css/my-reset.css');
+        $asset_manager->registerStyle('system-stylecss', '/assets/css/system-style.css');
+        $asset_manager->registerScript('system-mainjs', '/assets/js/system-main.js');
+
+        $asset_manager->enqueueStyles([
+            'system-normalize',
+            'system-reset',
+            'system-stylecss'
+        ]);
+
+        $asset_manager->enqueueScripts(['system-mainjs']);
+
+        $this->onHead([$asset_manager, 'printEnqueuedStyles'], 'system-css');
+        $this->onHead([$asset_manager, 'printEnqueuedScripts'], 'system-js');
+    }
+
     public function setLayout(string $layout_path)
     {
         $this->layout_path = $layout_path;
@@ -77,6 +98,8 @@ class Viewer extends Module
 
     public function showLayout(string $view_name, array $params, int $code = 200)
     {
+        $this->initSystemAssets();
+
         $this->params = $params;
         $this->code = $code;
 
