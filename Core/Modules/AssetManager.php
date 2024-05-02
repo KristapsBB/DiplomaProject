@@ -37,16 +37,21 @@ class AssetManager
         return $this->path_to_assets;
     }
 
+    public function generatePathToAsset(string $asset_uri): string
+    {
+        $path_to_asset_file = Core::getCurrentApp()->getAppRoot();
+        $path_to_asset_file .= $this->getPathToAssets();
+        $path_to_asset_file .= $asset_uri;
+
+        return $path_to_asset_file;
+    }
+
     /**
      * returns true if the asset file exists
      */
     public function existsAsset(string $asset_file_uri): bool
     {
-        $path_to_asset_file = Core::getCurrentApp()->getAppRoot();
-        $path_to_asset_file .= $this->getPathToAssets();
-        $path_to_asset_file .= $asset_file_uri;
-
-        return file_exists($path_to_asset_file);
+        return file_exists($this->generatePathToAsset($asset_file_uri));
     }
 
     public function registerStyle(string $style_name, string $uri, string $version = '')
@@ -72,7 +77,7 @@ class AssetManager
         string $version = '',
         ?array $params = []
     ) {
-        if ($this->existsAsset($uri)) {
+        if (!$this->existsAsset($uri)) {
             throw new \Exception($asset_type . ' file not found: ' . $uri);
         }
 
@@ -212,7 +217,7 @@ class AssetManager
         $http = Core::getCurrentApp()->getHttp();
 
         $asset_url = $http->generateUrl(
-            $asset_uri,
+            '/' . $this->getPathToAssets() . $asset_uri,
             !empty($version) ? ['version' => $version] : null
         );
 

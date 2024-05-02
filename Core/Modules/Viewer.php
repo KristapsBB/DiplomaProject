@@ -30,10 +30,10 @@ class Viewer extends Module
     {
         $asset_manager = Core::getCurrentApp()->getAssetManager();
 
-        $asset_manager->registerStyle('system-normalize', '/assets/css/normalize.css');
-        $asset_manager->registerStyle('system-reset', '/assets/css/my-reset.css');
-        $asset_manager->registerStyle('system-stylecss', '/assets/css/system-style.css');
-        $asset_manager->registerScript('system-mainjs', '/assets/js/system-main.js');
+        $asset_manager->registerStyle('system-normalize', 'css/normalize.css');
+        $asset_manager->registerStyle('system-reset', 'css/my-reset.css');
+        $asset_manager->registerStyle('system-stylecss', 'css/system-style.css');
+        $asset_manager->registerScript('system-mainjs', 'js/system-main.js');
 
         $asset_manager->enqueueStyles([
             'system-normalize',
