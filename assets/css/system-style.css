@@ -1,4 +1,4 @@
-.login-block {
+.login-block, .error-block {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -54,4 +54,9 @@
 .login-form__submit:hover {
 	/* box-shadow: inset 0 0 10px 0px white; */
 	background-color: #40cf40;
+}
+
+.error-block__message {
+	font-size: 30px;
+	margin-top: 50px;
 }
