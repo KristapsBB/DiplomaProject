@@ -24,6 +24,12 @@ return [
                 'max_nesting_depth' => 10,
             ],
         ],
+        'asset-manager' => [
+            'class' => \DiplomaProject\Core\Modules\AssetManager::class,
+            'params' => [
+                'path_to_assets' => 'assets',
+            ],
+        ],
         'security' => [
             'class' => \DiplomaProject\Core\Modules\Security::class,
             'params' => [

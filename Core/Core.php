@@ -116,6 +116,15 @@ class Core
         return $this->getModule('router');
     }
 
+    /**
+     * returns asset-manager module
+     * @return \DiplomaProject\Core\Modules\AssetManager
+     */
+    public function getAssetManager()
+    {
+        return $this->getModule('asset-manager');
+    }
+
     private function processRequest()
     {
         /**
