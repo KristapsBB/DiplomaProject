@@ -168,7 +168,7 @@ class Core
             $this->processRequest();
         } catch (\Throwable $e) {
             echo $e->getMessage();
-            var_dump($e->getTrace());
+            var_dump($e);
         }
     }
 }
