@@ -67,6 +67,16 @@ class Viewer extends Module
         $this->params = array_pop($this->params_stack);
     }
 
+    private function setPageParam(string $param_name, $value)
+    {
+        $this->page_params[$param_name] = $value;
+    }
+
+    private function getPageParam(string $param_name)
+    {
+        return $this->page_params[$param_name] ?? null;
+    }
+
     /**
      * used inside the layout to show the selected view
      */
@@ -140,5 +150,21 @@ class Viewer extends Module
     private function footer()
     {
         $this->trigger('footer');
+    }
+
+    /**
+     * sets CSS classes for the body tag, used in the layout
+     */
+    private function setBodyClass(string $css_classes = '')
+    {
+        $this->setPageParam('body-class', $css_classes);
+    }
+
+    /**
+     * prints CSS classes for the body tag, used in the layout
+     */
+    private function printBodyClass()
+    {
+        echo $this->getPageParam('body-class');
     }
 }
