@@ -3,6 +3,7 @@
 namespace DiplomaProject\Core\Modules;
 
 use DiplomaProject\Core\Core;
+use DiplomaProject\Core\Models\ViewParams;
 use DiplomaProject\Core\Module;
 
 class Viewer extends Module
@@ -22,7 +23,7 @@ class Viewer extends Module
     /**
      * HTTP code of response
      */
-    public int $code = 500;
+    public int $http_code = 500;
 
     public function configure(array $config_params)
     {
@@ -86,7 +87,7 @@ class Viewer extends Module
      */
     private function getHttpCode(): int
     {
-        return $this->code;
+        return $this->http_code;
     }
 
     /**
@@ -125,16 +126,16 @@ class Viewer extends Module
         $this->popParams();
     }
 
-    public function showLayout(string $view_name, array $params, array $page_params, int $code = 200)
+    public function showLayout(ViewParams $view_params)
     {
         $this->initSystemAssets();
 
-        $this->page_params = $page_params;
-        $this->params = $params;
-        $this->code = $code;
+        $this->page_params = $view_params->page_params;
+        $this->params = $view_params->params;
+        $this->http_code = $view_params->http_code;
 
         ob_start();
-        $this->showView($view_name, $params);
+        $this->showView($view_params->view_name, $view_params->params);
         $this->root_view_contents = ob_get_contents();
         ob_end_clean();
 
