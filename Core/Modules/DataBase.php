@@ -107,6 +107,7 @@ class DataBase
 
         $is_complete = $query->execute();
 
+        $this->last_query_result = null;
         $this->last_prepared_query = $query;
         $this->last_query_result_obj = $query->get_result();
 
