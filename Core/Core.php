@@ -152,16 +152,17 @@ class Core
          */
         switch ($result['type']) {
             case 'view':
-                $view_name = $result['view_name'];
-                $params    = $result['params'];
-                $code      = $result['code'];
+                $view_name   = $result['view_name'];
+                $params      = $result['params'];
+                $page_params = $result['page_params'];
+                $code        = (int) $result['code'];
 
-                return $this->getViewer()->showLayout($view_name, $params, $code);
+                return $this->getViewer()->showLayout($view_name, $params, $page_params, $code);
                 break;
             case 'url':
                 $uri        = $result['uri'];
                 $get_params = $result['get_params'];
-                $code       = $result['code'];
+                $code       = (int) $result['code'];
 
                 $url = $this->getHttp()->generateUrl($uri, $get_params);
                 return $this->getHttp()->redirect($url, $code);

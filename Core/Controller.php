@@ -4,12 +4,13 @@ namespace DiplomaProject\Core;
 
 class Controller
 {
-    public function showView(string $view_name, array $params, int $code = 200): array
+    public function showView(string $view_name, array $params, ?array $page_params = [], int $code = 200): array
     {
         return [
             'type' => 'view',
             'view_name' => $view_name,
-            'params' => $params,
+            'params' => $params ?? [],
+            'page_params' => $page_params ?? [],
             'code' => $code
         ];
     }

@@ -18,7 +18,11 @@ class Viewer extends Module
 
     public array $page_params = [];
     public array $params = [];
-    public int $code;
+
+    /**
+     * HTTP code of response
+     */
+    public int $code = 500;
 
     public function configure(array $config_params)
     {
@@ -78,6 +82,22 @@ class Viewer extends Module
     }
 
     /**
+     * returns HTTP code of response
+     */
+    private function getHttpCode(): int
+    {
+        return $this->code;
+    }
+
+    /**
+     * prints HTTP code of response
+     */
+    private function printHttpCode()
+    {
+        echo $this->getHttpCode();
+    }
+
+    /**
      * used inside the layout to show the selected view
      */
     public function theRootView()
@@ -88,7 +108,7 @@ class Viewer extends Module
     /**
      * shows the view; recursively
      */
-    public function showView(string $view_name, array $params, int $code = 200)
+    public function showView(string $view_name, array $params = [])
     {
         if ($this->curr_nesting_depth > $this->max_nesting_depth) {
             throw new \Exception('maximum recursion depth exceeded');
@@ -98,7 +118,6 @@ class Viewer extends Module
         $this->curr_nesting_depth++;
 
         $this->params = $params;
-        $this->code = $code;
 
         require($this->getPathToView($view_name));
 
@@ -106,15 +125,16 @@ class Viewer extends Module
         $this->popParams();
     }
 
-    public function showLayout(string $view_name, array $params, int $code = 200)
+    public function showLayout(string $view_name, array $params, array $page_params, int $code = 200)
     {
         $this->initSystemAssets();
 
+        $this->page_params = $page_params;
         $this->params = $params;
         $this->code = $code;
 
         ob_start();
-        $this->showView($view_name, $params, $code);
+        $this->showView($view_name, $params);
         $this->root_view_contents = ob_get_contents();
         ob_end_clean();
 
