@@ -43,6 +43,18 @@ class Authentication extends Controller
         ]);
     }
 
+    public function logout()
+    {
+        $authentication = Core::getCurrentApp()->getAuthentication();
+
+        if ($this->isCurrUserLoggedIn()) {
+            $curr_user = $authentication->getCurrentUser();
+            $authentication->logout($curr_user);
+        }
+
+        return $this->toUrl('/login');
+    }
+
     public function default()
     {
         return $this->login();

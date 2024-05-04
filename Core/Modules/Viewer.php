@@ -131,6 +131,7 @@ class Viewer extends Module
         $this->initSystemAssets();
 
         $this->page_params = $view_params->page_params;
+        $this->page_params['is_user_logged_in'] = $view_params->is_user_logged_in;
         $this->params = $view_params->params;
         $this->http_code = $view_params->http_code;
 

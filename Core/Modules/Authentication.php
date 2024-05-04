@@ -96,4 +96,12 @@ class Authentication
 
         Core::getCurrentApp()->getHttp()->setCookie('token', $new_token, time() + $this->token_lifetime * 60);
     }
+
+    public function logout(UserInterface & DataBaseModelInterface $user)
+    {
+        $user->setToken('');
+        $user->save();
+
+        Core::getCurrentApp()->getHttp()->setCookie('token', '');
+    }
 }
