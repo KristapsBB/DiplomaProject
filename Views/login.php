@@ -1,20 +1,21 @@
 <?php
 
+use DiplomaProject\Core\Libs\HtmlHelper;
 use DiplomaProject\Core\Modules\Viewer;
 
 /**
  * @var Viewer $this
  */
 
-$this->page_params['title'] = 'Login page';
+$this->setPageParam('title', 'Login page');
+$this->setBodyClass('page page-login');
 ?>
-
-<div class="login-page login-block">
+<div class="login-block">
     <h1>Login Page</h1>
     <form action="/login" method="POST" class="login-form">
         <div class="login-form__error ">
             <?php if (!empty($this->params['error'])) {
-                echo 'Error: ' . $this->params['error'];
+                HtmlHelper::printEsc("Error: {$this->params['error']}");
             } ?>
         </div>
         <div class="login-form__input-wrapper">
