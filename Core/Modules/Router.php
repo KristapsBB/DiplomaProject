@@ -4,6 +4,7 @@ namespace DiplomaProject\Core\Modules;
 
 class Router
 {
+    private string $error_controller = '';
     private array $controller_map = [];
     private string $current_route;
 
@@ -12,7 +13,22 @@ class Router
 
     public function configure(array $params)
     {
+        $this->setErrorController($params['error_controller']);
         $this->setControllerMap($params['controller_map']);
+    }
+
+    public function setErrorController(string $error_controller)
+    {
+        if (!class_exists($error_controller)) {
+            throw new \Exception("class '$error_controller' not found");
+        }
+
+        $this->error_controller = $error_controller;
+    }
+
+    public function getErrorController(): string
+    {
+        return $this->error_controller;
     }
 
     public function setControllerMap(array $controller_map)
