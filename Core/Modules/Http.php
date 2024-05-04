@@ -16,6 +16,9 @@ class Http
         $this->base_url = $base_url;
     }
 
+    /**
+     * @param ?array $get_params GET-parameters of URL
+     */
     public function generateUrl(string $uri, ?array $get_params = null)
     {
         $url = '';
