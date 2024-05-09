@@ -34,6 +34,19 @@ class Controller
         return $url_params;
     }
 
+    /**
+     * If $user is empty, the current user will be used
+     */
+    public function isAdmin(null | (UserInterface & DataBaseModelInterface) $user = null): bool
+    {
+        if (null === $user) {
+            $authentication = Core::getCurrentApp()->getAuthentication();
+            $user = $authentication->getCurrentUser();
+        }
+
+        return ($user->validateToken() && $user->isAdmin());
+    }
+
     public function isCurrUserLoggedIn(): bool
     {
         $authentication = Core::getCurrentApp()->getAuthentication();
