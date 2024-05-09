@@ -45,9 +45,10 @@ class Authentication extends Controller
 
     public function logout()
     {
+        $http = Core::getCurrentApp()->getHttp();
         $authentication = Core::getCurrentApp()->getAuthentication();
 
-        if ($this->isCurrUserLoggedIn()) {
+        if ($http->isPost() && $this->isCurrUserLoggedIn()) {
             $curr_user = $authentication->getCurrentUser();
             $authentication->logout($curr_user);
         }

@@ -5,14 +5,16 @@
  */
 ?>
 
-<div class="header-menu <?php echo $this->params['block-style-class']; ?>">
+<form
+    class="header-menu <?php echo $this->params['block-style-class']; ?>"
+    method="POST"
+    action="/authentication/logout"
+    >
     <?php if ($this->getPageParam('is_user_logged_in')) : ?>
-        <div class="logout-button">
-            <a href="/authentication/logout">Logout</a>
-        </div>
+        <button type="submit" class="logout-button">Logout</button>
     <?php else : ?>
         <div class="login-button">
             <a href="/login">Login</a>
         </div>
     <?php endif; ?>
-</div>
+</form>
