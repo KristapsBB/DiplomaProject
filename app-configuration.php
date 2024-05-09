@@ -49,7 +49,8 @@ return [
                 'error_controller' => \DiplomaProject\Controllers\Errors::class,
                 'controller_map' => [
                     'authentication' => \DiplomaProject\Controllers\Authentication::class,
-                    'login' => \DiplomaProject\Controllers\Authentication::class,
+                    'login'          => \DiplomaProject\Controllers\Authentication::class,
+                    'admin-panel'    => \DiplomaProject\Controllers\AdminPanel::class,
                 ],
             ],
         ],

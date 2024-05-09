@@ -79,9 +79,9 @@ class TenderSearch
         return ceil($number_tenders / $this->tenders_per_page);
     }
 
-    public function getTenderList(): array
+    public function getTenderList(): TenderList
     {
-        return $this->tenders;
+        return (new TenderList($this->tenders));
     }
 
     public function getLastError(): string

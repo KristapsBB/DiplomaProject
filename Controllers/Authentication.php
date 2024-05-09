@@ -16,7 +16,7 @@ class Authentication extends Controller
         $curr_user = $authentication->getCurrentUser();
 
         if ($curr_user->validateToken()) {
-            return $this->toUrl('/admin-panel/tender-list');
+            return $this->toUrl('/admin-panel/import-tenders');
         }
 
         $http = Core::getCurrentApp()->getHttp();
@@ -32,7 +32,7 @@ class Authentication extends Controller
                 $user = $authentication->getUserByLogin($login_form->login);
                 $authentication->authenticate($user);
 
-                return $this->toUrl('/admin-panel/tender-list');
+                return $this->toUrl('/admin-panel/import-tenders');
             }
 
             $error = $login_form->getLastError();
