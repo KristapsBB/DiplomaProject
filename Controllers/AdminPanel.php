@@ -4,6 +4,7 @@ namespace DiplomaProject\Controllers;
 
 use DiplomaProject\Core\Controller;
 use DiplomaProject\Core\Core;
+use DiplomaProject\Models\Pagination;
 use DiplomaProject\Models\TenderSearch;
 
 class AdminPanel extends Controller
@@ -33,9 +34,16 @@ class AdminPanel extends Controller
             $tender_search->fetchTendersFromApi($search_query, $page);
         }
 
+        $pagination = new Pagination(
+            $page,
+            $tender_search->countPages() ?? 0,
+            "?search-query={$search_query}&mode={$mode}&page="
+        );
+
         return $this->showView('tender-import', [
             'search' => $tender_search,
             'tender_list' => $tender_search->getTenderList(),
+            'pagination' => $pagination,
         ]);
     }
 }
