@@ -146,7 +146,14 @@ class Core
          * running the selected controller method
          */
         $controller = new $controller_class();
-        $result = $controller->$method_name();
+
+        if (method_exists($controller, 'before')) {
+            $result = $controller->before($method_name);
+        }
+
+        if (null === $result) {
+            $result = $controller->$method_name();
+        }
 
         /**
          * showing view, redirection, etc
