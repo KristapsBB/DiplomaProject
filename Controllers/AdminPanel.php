@@ -25,9 +25,11 @@ class AdminPanel extends Controller
         $page = $http->get('page') ?? 1;
         $page = (int) $page;
 
+        $mode = $http->get('mode') ?? '';
         $tender_search = new TenderSearch();
 
         if (null !== $search_query) {
+            $tender_search->setMode($mode);
             $tender_search->fetchTendersFromApi($search_query, $page);
         }
 

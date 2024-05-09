@@ -3,6 +3,7 @@
 namespace DiplomaProject\Models;
 
 use DiplomaProject\Core\Models\CurlRequest;
+use DiplomaProject\Enums\TenderSearchMode;
 use DiplomaProject\Enums\TenderSearchScope;
 use DiplomaProject\Exceptions\TendersApiException;
 
@@ -21,6 +22,7 @@ class TendersAPI
      */
     private array $fields = ['FT'];
     private TenderSearchScope $scope = TenderSearchScope::ACTIVE;
+    private TenderSearchMode $search_mode = TenderSearchMode::simple;
 
     public function __construct(
         private $api_url = 'https://api.ted.europa.eu/v3/notices/search'
@@ -61,13 +63,25 @@ class TendersAPI
         $this->scope = TenderSearchScope::from(strtoupper($scope));
     }
 
+    public function setMode(string $mode)
+    {
+        $this->search_mode = TenderSearchMode::from(strtolower($mode));
+    }
+
     private function buildQuery(string $query_text, int $page = 1): array
     {
         if ($page <= 0) {
             throw new TendersApiException(400, '$page parameter must be greater than zero');
         }
 
-        $query_string = "(FT ~ ({$query_text}))";
+        switch ($this->search_mode) {
+            case TenderSearchMode::simple:
+                $query_string = "(FT ~ ({$query_text}))";
+                break;
+            case TenderSearchMode::targeted:
+                $query_string = "(publication-number IN ({$query_text}))";
+                break;
+        }
 
         $query = [
             'query'  => $query_string,

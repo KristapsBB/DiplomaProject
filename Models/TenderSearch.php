@@ -2,6 +2,7 @@
 
 namespace DiplomaProject\Models;
 
+use DiplomaProject\Enums\TenderSearchMode;
 use DiplomaProject\Exceptions\TendersApiException;
 
 class TenderSearch
@@ -11,6 +12,7 @@ class TenderSearch
     private int $total_tenders_count = 0;
     private int $tenders_per_page = 10;
     private string $last_error = '';
+    private string $search_mode = TenderSearchMode::simple->value;
 
     public function isResultsEmpty(): bool
     {
@@ -20,6 +22,13 @@ class TenderSearch
     public function getSearchQuery(): string
     {
         return $this->search_query;
+    }
+
+    public function setMode(string $mode)
+    {
+        if (!empty($mode)) {
+            $this->search_mode = $mode;
+        }
     }
 
     public function fetchTendersFromApi(string $search_query, int $page = 1): bool
@@ -44,6 +53,7 @@ class TenderSearch
                 'publication-date',
                 'deadline-receipt-tender-date-lot',
             ]);
+            $tenders_api->setMode($this->search_mode);
 
             $tenders_data = $tenders_api->fetchTendersData($page);
 
@@ -113,5 +123,25 @@ class TenderSearch
         }
 
         return $new_tender;
+    }
+
+    public function getModes(): array
+    {
+        $modes = [
+            'by full text'   => [
+                'value'   => TenderSearchMode::simple->value,
+            ],
+            'by publications numbers' => [
+                'value' => TenderSearchMode::targeted->value,
+            ],
+        ];
+
+        foreach ($modes as $key => $mode) {
+            if ($this->search_mode === $mode['value']) {
+                $modes[$key]['selected'] = 'true';
+            }
+        }
+
+        return $modes;
     }
 }

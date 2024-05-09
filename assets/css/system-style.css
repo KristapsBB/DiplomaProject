@@ -213,3 +213,13 @@
 .tender-search__error-message {
 	color: rgb(204, 0, 0);
 }
+
+.tender-search__select-mode {
+	height: 32px;
+	padding: 0px 10px;
+}
+
+.tender-search__note {
+	padding: 15px 10px 5px;
+	color: dimgrey;
+}

@@ -22,7 +22,17 @@ $search = $this->params['search'];
             value="<?php HtmlHelper::printEsc($search->getSearchQuery()); ?>"
             >
         <button class="tender-search__submit" type="submit">search</button>
+        <select name="mode" class="tender-search__select-mode">
+            <?php foreach ($search->getModes() as $mode_label => $mode) : ?>
+                <option value="<?php echo $mode['value']; ?>" <?php echo ($mode['selected']) ? 'selected' : ''; ?>>
+                    <?php echo $mode_label; ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
     </form>
+    <div class="tender-search__note">
+        example of a query for searching by publication numbers: "665359-2023, 265343-2021, 93131-2024"
+    </div>
 
     <?php if (!$search->isResultsEmpty()) : ?>
         <div class="tender-search__total-tenders-count">
