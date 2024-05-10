@@ -248,4 +248,31 @@ class DbModel
     {
         $this->is_saved_in_db = true;
     }
+
+    public static function getFieldsOfExisting(string $field_name = 'id', array $values = []): array
+    {
+        $db = Core::getCurrentApp()->getDb();
+        $table_name = static::$db_table_name;
+
+        $params = [];
+        foreach ($values as $value) {
+            $params[] = ['type' => 'string', 'value' => $value];
+        }
+        $param_templ = self::getDbParamsTempl(count($params));
+
+        $query_string =
+            "SELECT `{$field_name}`
+            FROM `{$table_name}`
+            WHERE `{$field_name}` IN ({$param_templ})
+            LIMIT 1000";
+        $db->execQuery($query_string, $params);
+
+        $result_array = $db->getResultAsArray();
+
+        if (count($result_array) === 0) {
+            return [];
+        }
+
+        return $result_array;
+    }
 }

@@ -4,16 +4,29 @@ namespace DiplomaProject\Controllers;
 
 use DiplomaProject\Core\Controller;
 use DiplomaProject\Core\Core;
+use DiplomaProject\Enums\TenderSearchMode;
 use DiplomaProject\Models\Pagination;
 use DiplomaProject\Models\Tender;
+use DiplomaProject\Models\TenderList;
 use DiplomaProject\Models\TenderSearch;
 
 class AdminPanel extends Controller
 {
     public function before(string $method_name)
     {
+        /**
+         * names of methods that can only be accessed by a POST request
+         */
+        $onlyPost = ['searchAndSave'];
+
         if (!$this->isAdmin()) {
             return $this->showView('error', ['error' => 'Access denied'], [], 403);
+        }
+
+        $http = Core::getCurrentApp()->getHttp();
+
+        if (false !== array_search($method_name, $onlyPost) && !$http->isPost()) {
+            return $this->showView('error', ['error' => 'Method Not Allowed'], [], 405);
         }
 
         return null;
@@ -88,5 +101,44 @@ class AdminPanel extends Controller
         ];
 
         return $this->sendJson($response);
+    }
+
+    public function searchAndSave()
+    {
+        $http = Core::getCurrentApp()->getHttp();
+        $pub_numbers = $http->post('pub-numbers');
+
+        $tender_search = new TenderSearch();
+        $tender_search->setMode(TenderSearchMode::targeted->value);
+        $tender_search->fetchTendersFromApi(implode(', ', $pub_numbers));
+
+        if (!empty($tender_search->getLastError())) {
+            return $this->sendJson([
+                'error' => $tender_search->getLastError(),
+            ]);
+        }
+
+        $tender_list = $tender_search->getTenderList();
+        $saving_status = [];
+        /**
+         * @var Tender $tender
+         */
+        foreach ($tender_list->getTenders() as $tender) {
+            $pub_num = $tender->publication_number;
+
+            if (!$tender_list->isTenderSaved($pub_num)) {
+                $saving_status[$pub_num] = ($tender->save()) ? 'saved' : 'failed';
+            } else {
+                $saving_status[$pub_num] = 'already-exists';
+            }
+        }
+
+        if ('json' === $http->post('format')) {
+            return $this->sendJson([
+                'saving_status' => $saving_status,
+            ]);
+        } else {
+            return $this->toUrl($http->getReferer());
+        }
     }
 }

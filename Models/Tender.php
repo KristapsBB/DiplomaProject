@@ -2,8 +2,23 @@
 
 namespace DiplomaProject\Models;
 
-class Tender
+use DiplomaProject\Core\DbModel;
+
+class Tender extends DbModel
 {
+    public static string $db_table_name = 'tenders';
+    public static array $db_columns = [
+        'id',
+        'publication_number',
+        'publication_date',
+        'notice_title',
+        'buyer_name',
+        'country',
+        'contract_nature',
+        'deadline',
+        'link'
+    ];
+
     public int $id;
     public string $publication_number;
     public string $publication_date;
