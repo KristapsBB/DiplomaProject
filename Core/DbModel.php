@@ -120,7 +120,7 @@ class DbModel
      *  "`column1`, `column2`, `column3`"
      * ```
      */
-    public function buildDbColumnsFromFields(array $fields)
+    public static function buildDbColumnsFromFields(array $fields)
     {
         return implode(
             ', ',
@@ -133,7 +133,7 @@ class DbModel
         );
     }
 
-    public function getDbParamsTempl(int $number_params): string
+    public static function getDbParamsTempl(int $number_params): string
     {
         $params = [];
         for ($i = 0; $i < $number_params; $i++) {
@@ -170,9 +170,9 @@ class DbModel
         $db = Core::getCurrentApp()->getDb();
         $table_name = static::$db_table_name;
 
-        $params = $this->getFieldsForDbQuery($without_id = true);
-        $columns = $this->buildDbColumnsFromFields($params);
-        $columns_templ = $this->getDbParamsTempl(count($params));
+        $params = self::getFieldsForDbQuery($without_id = true);
+        $columns = self::buildDbColumnsFromFields($params);
+        $columns_templ = self::getDbParamsTempl(count($params));
 
         $query_string =
             "INSERT INTO `{$table_name}`({$columns})
@@ -204,7 +204,7 @@ class DbModel
 
         $params = $this->getFieldsForDbQuery();
         $SET = static::buildSET(
-            explode(', ', $this->buildDbColumnsFromFields($params))
+            explode(', ', self::buildDbColumnsFromFields($params))
         );
         $params[] = ['type' => 'int', 'value' => $this->id];
 
