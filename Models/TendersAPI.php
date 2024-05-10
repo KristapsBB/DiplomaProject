@@ -142,11 +142,16 @@ class TendersAPI
                         $tenders_data[$key][$field_name] = end(end($tender_field));
                         break;
                     case 'contract-nature':
-                    case 'deadline-receipt-tender-date-lot':
                         $tenders_data[$key][$field_name] = end($tender_field);
+                        break;
+                    case 'deadline-receipt-tender-date-lot':
+                        $tenders_data[$key][$field_name] = substr(end($tender_field), 0, 10);
                         break;
                     case 'place-of-performance':
                         $tenders_data[$key][$field_name] = implode(', ', $tender_field);
+                        break;
+                    case 'publication-date':
+                        $tenders_data[$key][$field_name] = substr($tender_field, 0, 10);
                         break;
                 }
             }
