@@ -105,7 +105,7 @@ class TenderSearch
             'publication-number'   => 'publication_number',
             'publication-date'     => 'publication_date',
             'notice-title'         => 'notice_title',
-            'place-of-performance' => 'counry_codes',
+            'place-of-performance' => 'country',
             'buyer-name'           => 'buyer_name',
             'contract-nature'      => 'contract_nature',
             'link'                 => 'link',

@@ -145,6 +145,9 @@ class TendersAPI
                     case 'deadline-receipt-tender-date-lot':
                         $tenders_data[$key][$field_name] = end($tender_field);
                         break;
+                    case 'place-of-performance':
+                        $tenders_data[$key][$field_name] = implode(', ', $tender_field);
+                        break;
                 }
             }
 
