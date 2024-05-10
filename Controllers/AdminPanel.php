@@ -5,6 +5,7 @@ namespace DiplomaProject\Controllers;
 use DiplomaProject\Core\Controller;
 use DiplomaProject\Core\Core;
 use DiplomaProject\Models\Pagination;
+use DiplomaProject\Models\Tender;
 use DiplomaProject\Models\TenderSearch;
 
 class AdminPanel extends Controller
@@ -45,5 +46,47 @@ class AdminPanel extends Controller
             'tender_list' => $tender_search->getTenderList(),
             'pagination' => $pagination,
         ]);
+    }
+
+    public function getTenderTemplate()
+    {
+        $tender = Tender::getStub();
+        $tender_fields = $tender->getFields();
+
+        foreach ($tender_fields as $field_name => $value) {
+            $tender_fields[$field_name] = '%' . strtoupper($field_name) . '%';
+        }
+
+        Core::getCurrentApp()->getViewer()->setLayout('empty-layout');
+
+        return $this->showView('tender-list-item', [
+            'tender' => $tender_fields,
+        ]);
+    }
+
+    public function getTendersData()
+    {
+        $http = Core::getCurrentApp()->getHttp();
+
+        $search_query = trim($http->get('search-query'));
+        $page = (int) ($http->get('page') ?? 1);
+        $mode = $http->get('mode') ?? '';
+
+        $tender_search = new TenderSearch();
+        $tender_search->setMode($mode);
+        $tender_search->fetchTendersFromApi($search_query, $page);
+
+        $tenders = $tender_search->getTenderList()->getTenders();
+
+        foreach ($tenders as $key => $tender) {
+            $tenders[$key] = $tender->getFields();
+        }
+
+        $response = [
+            'error' => $tender_search->getLastError(),
+            'items' => $tenders,
+        ];
+
+        return $this->sendJson($response);
     }
 }

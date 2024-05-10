@@ -21,12 +21,14 @@ $tender_list = $this->params['tender_list'];
             <div class="tender-list__header-publication-date">Publication date</div>
             <div class="tender-list__header-deadline">Deadline for receipt of tenders</div>
         </div>
-        <?php
-        /**
-         * @var Tender $tender
-         */
-        foreach ($tender_list->getTenders() as $tender) : ?>
-            <?php $this->showView('tender-list-item', ['tender' => $tender->getFields()]); ?>
-        <?php endforeach; ?>
+        <div class="tender-list__items">
+            <?php
+            /**
+             * @var Tender $tender
+             */
+            foreach ($tender_list->getTenders() as $tender) : ?>
+                <?php $this->showView('tender-list-item', ['tender' => $tender->getFields()]); ?>
+            <?php endforeach; ?>
+        </div>
     <?php endif; ?>
 </div>

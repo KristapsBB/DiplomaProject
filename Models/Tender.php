@@ -32,4 +32,18 @@ class Tender
             'link' => $this->link,
         ];
     }
+
+    public static function getStub(): self
+    {
+        $tender = new self();
+        $tender->publication_number = '000000-0000';
+        $tender->notice_title = '';
+        $tender->counry_codes = [''];
+        $tender->buyer_name = '';
+        $tender->contract_nature = '';
+        $tender->publication_date = '';
+        $tender->deadline = '';
+        $tender->link = '';
+        return $tender;
+    }
 }

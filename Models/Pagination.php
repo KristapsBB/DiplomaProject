@@ -43,7 +43,7 @@ class Pagination
 
         for ($page = 1; $page <= $this->totalPagesCount(); $page++) {
             if ($this->isCurrent($page)) {
-                $links[] = "<a class='$link_css_class $active_css_class'>$page</a>";
+                $links[] = "<a class='$link_css_class $active_css_class' href='{$this->getPageUrl($page)}'>$page</a>";
             } else {
                 $links[] = "<a class='$link_css_class' href='{$this->getPageUrl($page)}'>$page</a>";
             }
