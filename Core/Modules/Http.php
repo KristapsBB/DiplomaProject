@@ -21,31 +21,17 @@ class Http
      */
     public function generateUrl(string $uri, ?array $get_params = null)
     {
-        $url = '';
-        $url .= $uri;
+        $url = $uri;
 
         if (!empty($get_params)) {
-            $url .= self::generateQueryString($get_params);
+            $url .= \http_build_query($get_params, 'var_');
+        }
+
+        if (parse_url($url, PHP_URL_HOST)) {
+            return "{$url}";
         }
 
         return "http://{$this->base_url}$url";
-    }
-
-    public static function generateQueryString(array $get_params): string
-    {
-        $query_string = '';
-
-        $get_paras = array_map(
-            function ($key, $value) {
-                return "{$key}={$value}";
-            },
-            array_keys($get_params),
-            $get_params
-        );
-
-        $query_string .= implode('&', $get_paras);
-
-        return "?{$query_string}";
     }
 
     public function redirect(string $url, int $code = 303)
@@ -93,5 +79,10 @@ class Http
         }
 
         return $value;
+    }
+
+    public function getReferer(): string
+    {
+        return $_SERVER['HTTP_REFERER'] ?? '';
     }
 }
