@@ -4,6 +4,7 @@ namespace DiplomaProject\Core;
 
 use DiplomaProject\Core\Interfaces\DataBaseModelInterface;
 use DiplomaProject\Core\Interfaces\UserInterface;
+use DiplomaProject\Core\Models\JsonParams;
 use DiplomaProject\Core\Models\UrlParams;
 use DiplomaProject\Core\Models\ViewParams;
 
@@ -32,6 +33,15 @@ class Controller
         $url_params->params = $get_params;
 
         return $url_params;
+    }
+
+    public function sendJson(
+        array $data,
+        int $http_code = 200
+    ): JsonParams {
+        $json_params = new JsonParams($data, $http_code);
+
+        return $json_params;
     }
 
     /**

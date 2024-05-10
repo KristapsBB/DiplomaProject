@@ -166,6 +166,9 @@ class Core
                 $url = $this->getHttp()->generateUrl($result->uri, $result->params);
                 return $this->getHttp()->redirect($url, $result->http_code);
                 break;
+            case 'json':
+                echo json_encode($result->data, JSON_HEX_QUOT);
+                break;
         }
     }
 
