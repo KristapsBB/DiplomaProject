@@ -42,6 +42,9 @@ class DbModel
         return static::getFromArray($result_array[0], true);
     }
 
+    /**
+     * @return static[]
+     */
     public static function findAll($order_by = 'id'): array
     {
         $db = Core::getCurrentApp()->getDb();
@@ -52,7 +55,12 @@ class DbModel
 
         $result_array = $db->getResultAsArray();
 
-        return $result_array;
+        $objects = [];
+        foreach ($result_array as $fields) {
+            $objects[] = static::getFromArray($fields, true);
+        }
+
+        return $objects;
     }
 
     /**
