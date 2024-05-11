@@ -29,31 +29,34 @@ class Tender extends DbModel
     public ?string $deadline = null;
     public string $link;
 
-    public function getFields(): array
+    public function getFields(bool $without_id = true): array
     {
-        return [
-            'publication_number' => $this->publication_number,
-            'notice_title' => $this->notice_title,
-            'country' => $this->country,
-            'buyer_name' => $this->buyer_name,
-            'contract_nature' => $this->contract_nature ?? '',
-            'publication_date' => $this->publication_date,
-            'deadline' => $this->deadline ?? '',
-            'link' => $this->link,
-        ];
+        $fields = [];
+        foreach (static::$db_columns as $column_name) {
+            if ($without_id && 'id' === $column_name) {
+                continue;
+            }
+
+            $fields[$column_name] = $this->{$column_name};
+        }
+
+        return $fields;
     }
 
     public static function getStub(): self
     {
         $tender = new self();
+
+        foreach (static::$db_columns as $column_name) {
+            if ('id' === $column_name) {
+                continue;
+            }
+
+            $tender->{$column_name} = '';
+        }
+
         $tender->publication_number = '000000-0000';
-        $tender->notice_title = '';
-        $tender->country = '';
-        $tender->buyer_name = '';
-        $tender->contract_nature = '';
-        $tender->publication_date = '';
-        $tender->deadline = '';
-        $tender->link = '';
+
         return $tender;
     }
 }

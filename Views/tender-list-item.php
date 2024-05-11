@@ -26,13 +26,13 @@ $tender = $this->params['tender'];
             Official name: <?php HtmlHelper::printEsc($tender['buyer_name']); ?>
         </div>
         <div class="tender__place_of_performance">
-            Main nature of the contract: <?php HtmlHelper::printEsc($tender['contract_nature']); ?>
+            Main nature of the contract: <?php HtmlHelper::printEsc($tender['contract_nature'] ?? 'not specified'); ?>
         </div>
     </div>
     <div class="tender__publication-date">
         <?php HtmlHelper::printEsc($tender['publication_date']); ?>
     </div>
     <div class="tender__deadline">
-        <?php HtmlHelper::printEsc($tender['deadline']); ?>
+        <?php HtmlHelper::printEsc($tender['deadline'] ?? ''); ?>
     </div>
 </div>

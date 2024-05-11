@@ -147,7 +147,13 @@ class TenderTemplater {
 		let template = this.template;
 
 		for (let key in tender_fields) {
-			template = template.replace(`%${key.toUpperCase()}%`, tender_fields[key]);
+			let value = tender_fields[key];
+
+			if (null === value) {
+				value = '';
+			}
+
+			template = template.replace(`%${key.toUpperCase()}%`, value);
 		}
 
 		return template;
