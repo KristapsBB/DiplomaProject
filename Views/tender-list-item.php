@@ -11,7 +11,7 @@ $tender = $this->params['tender'];
 
 <div class="tender-list-item tender">
     <div class="tender__publication-number">
-        <a href="<?php HtmlHelper::printEsc($tender['link']); ?>" target="__blank">
+        <a href="<?php HtmlHelper::printEsc($tender['link']); ?>" target="_blank">
             <?php HtmlHelper::printEsc($tender['publication_number']); ?>
         </a>
     </div>
