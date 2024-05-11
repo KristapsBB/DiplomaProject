@@ -25,7 +25,7 @@ class TendersLoader {
 				return;
 			}
 
-			this,this.tryAgain();
+			this.tryAgain();
 		})
 	}
 
@@ -63,7 +63,8 @@ class TendersLoader {
 		}
 
 		let page_number = this.pagination.getActiveLinkElem().dataset.pageNumber;
-		this.pagination.trigger(page_number);
+		let link = this.pagination.getActiveLinkElem().href;
+		this.pagination.trigger(page_number, link);
 	}
 
 	init() {
@@ -237,7 +238,9 @@ class Pagination {
 			this.getLinkElem(page_number).classList.add(this.active_css_class);
 		}
 
-		this.trigger(page_number);
+		let link = this.getActiveLinkElem().href;
+		history.pushState({page: page_number}, '', link);
+		this.trigger(page_number, link);
 	}
 
 	onTogglePage(handler) {
@@ -248,9 +251,9 @@ class Pagination {
 		this.handlers = [];
 	}
 
-	trigger(page_number) {
+	trigger(page_number, link) {
 		for (let i = 0; i < this.handlers.length; i++) {
-			let url = (new URL(this.getActiveLinkElem().href, location.origin));
+			let url = (new URL(link, location.origin));
 
 			this.handlers[i](page_number, url.search);
 		}
