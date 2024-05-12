@@ -17,7 +17,7 @@ class AdminPanel extends Controller
         /**
          * names of methods that can only be accessed by a POST request
          */
-        $onlyPost = ['searchAndSave'];
+        $onlyPost = ['searchAndSave', 'deleteTenders'];
 
         if (!$this->isAdmin()) {
             return $this->showView('error', ['error' => 'Access denied'], [], 403);
@@ -144,5 +144,33 @@ class AdminPanel extends Controller
         return $this->showView('saved-tenders', [
             'saved_tenders' => $saved_tenders,
         ]);
+    }
+
+    public function deleteTenders()
+    {
+        $http = Core::getCurrentApp()->getHttp();
+        $pub_numbers = $http->post('pub-numbers');
+
+        if (!is_array($pub_numbers)) {
+            return $this->showView('error', [
+                'error' => 'array of publication numbers was expected'
+            ], [], 400);
+        }
+
+        $deleting_status = [];
+        foreach ($pub_numbers as $pub_number) {
+            if (Tender::deleteOneBy('publication_number', $pub_number)) {
+                $deleting_status[] = 'deleted';
+            } else {
+                $deleting_status[] = 'failed';
+            }
+        }
+        if ('json' === $http->post('format')) {
+            return $this->sendJson([
+                'deleting_status' => $deleting_status,
+            ]);
+        } else {
+            return $this->toUrl($http->getReferer());
+        }
     }
 }
