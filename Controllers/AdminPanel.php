@@ -41,10 +41,9 @@ class AdminPanel extends Controller
         $page = (int) $page;
 
         $mode = $http->get('mode') ?? '';
-        $tender_search = new TenderSearch();
+        $tender_search = new TenderSearch($mode);
 
         if (null !== $search_query) {
-            $tender_search->setMode($mode);
             $tender_search->fetchTendersFromApi($search_query, $page);
         }
 
@@ -89,8 +88,7 @@ class AdminPanel extends Controller
         $page = (int) ($http->get('page') ?? 1);
         $mode = $http->get('mode') ?? '';
 
-        $tender_search = new TenderSearch();
-        $tender_search->setMode($mode);
+        $tender_search = new TenderSearch($mode);
         $tender_search->fetchTendersFromApi($search_query, $page);
 
         $tenders = $tender_search->getTenderList()->getTenders();
@@ -113,8 +111,7 @@ class AdminPanel extends Controller
         $pub_numbers = $http->post('pub-numbers');
         $search_query = implode(', ', $pub_numbers ?? []);
 
-        $tender_search = new TenderSearch();
-        $tender_search->setMode(TenderSearchMode::targeted->value);
+        $tender_search = new TenderSearch(TenderSearchMode::targeted->value);
         $tender_search->fetchTendersFromApi($search_query);
 
         if (!empty($tender_search->getLastError())) {

@@ -14,6 +14,11 @@ class TenderSearch
     private string $last_error = '';
     private string $search_mode = TenderSearchMode::simple->value;
 
+    public function __construct(string $search_mode = '')
+    {
+        $this->setMode($search_mode);
+    }
+
     public function isResultsEmpty(): bool
     {
         return ($this->total_tenders_count <= 0);
