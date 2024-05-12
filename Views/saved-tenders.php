@@ -14,7 +14,7 @@ $saved_tenders = $this->params['saved_tenders'];
 ?>
 
 
-<form class="delete-tenders-form" action="/admin-panel/delete" method="post" id="delete-tenders-form">
+<form class="delete-tenders-form" action="/admin-panel/delete-tenders" method="post" id="delete-tenders-form">
     <button type="submit" class="save-tenders-form__button">delete selected tenders</button>
 </form>
 

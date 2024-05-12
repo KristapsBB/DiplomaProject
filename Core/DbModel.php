@@ -283,4 +283,31 @@ class DbModel
 
         return $result_array;
     }
+
+    public function delete(): bool
+    {
+        return static::deleteOneBy('id', $this->id);
+    }
+
+    public static function deleteOneBy(string $property_name, $value): bool
+    {
+        $db = Core::getCurrentApp()->getDb();
+        $table_name = static::$db_table_name;
+
+        $rp = new \ReflectionProperty(static::class, $property_name);
+        $type = $rp->getType()->getName();
+
+        $params[] = ['type' => $type, 'value' => $value];
+
+        $query_string =
+            "DELETE FROM `{$table_name}`
+            WHERE `{$property_name}` = ?;";
+        try {
+            $db->execQuery($query_string, $params);
+        } catch (\mysqli_sql_exception $e) {
+            return false;
+        }
+
+        return ($db->countAffectedRows() > 0);
+    }
 }
