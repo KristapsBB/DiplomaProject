@@ -7,9 +7,27 @@ use DiplomaProject\Core\Modules\Viewer;
  * @var Viewer $this
  */
 $tender = $this->params['tender'];
+$item_data = $this->params['item_data'] ?? [];
+
+switch ($item_data['editing_mode'] ?? '') {
+    case 'deleting':
+        $buttons_view = 'tender-list-item__delete-buttons';
+        break;
+    case 'saving':
+        $buttons_view = 'tender-list-item__save-buttons';
+        break;
+}
 ?>
 
-<div class="tender-list-item tender">
+<div class="tender-list-item tender <?php echo (($item_data['is_saved'])) ? 'tender_is-saved' : ''?>">
+    <?php
+    if (!empty($buttons_view)) {
+        $this->showView($buttons_view, [
+            'tender' => $tender,
+            'item_data' => $item_data,
+        ]);
+    }
+    ?>
     <div class="tender__publication-number">
         <a href="<?php HtmlHelper::printEsc($tender['link']); ?>" target="_blank">
             <?php HtmlHelper::printEsc($tender['publication_number']); ?>

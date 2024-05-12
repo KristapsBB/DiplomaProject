@@ -15,7 +15,7 @@
     </head>
     <body class="<?php $this->printBodyClass(); ?>">
         <header class="page__header">
-            <?php $this->showView('login-or-logout-button', ['block-style-class' => 'page__header-menu']) ?>
+            <?php $this->showView('header-menu') ?>
         </header>
         <div class="page__container">
             <?php $this->theRootView(); ?>

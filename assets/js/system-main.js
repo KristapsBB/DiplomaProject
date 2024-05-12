@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 	let tenders_toader = new TendersLoader(
-		'tender-list',
+		'searched-tenders',
 		'pagination'
 	);
 	tenders_toader.init();
@@ -34,7 +34,7 @@ class TendersLoader {
 
 		if (null === elem) {
 			elem = document.createElement('div');
-			elem.className = `${this.tender_list_css_class}__loading`;
+			elem.className = `tender-list__loading ${this.tender_list_css_class}__loading`;
 			elem.innerHTML = 'Please wait...';
 		}
 
@@ -46,7 +46,7 @@ class TendersLoader {
 
 		if (null === elem) {
 			elem = document.createElement('div');
-			elem.className = `${this.tender_list_css_class}__loading-error`;
+			elem.className = `tender-list__loading-error ${this.tender_list_css_class}__loading-error`;
 			elem.innerHTML = inner_html;
 		}
 
@@ -107,7 +107,11 @@ class TendersLoader {
 				if (null != error_message) {
 					this.getListItem().prepend(this.getErrorElem(
 						`${error_message}` +
-						`<button class="${this.tender_list_css_class}__try-again">Try again</button>`
+						`<button
+							class="tender-list__try-again ${this.tender_list_css_class}__try-again"
+							>
+							Try again
+						</button>`
 					));
 				} else {
 					this.getListItem().prepend(this.getErrorElem(
@@ -154,7 +158,7 @@ class TenderTemplater {
 				value = '';
 			}
 
-			template = template.replace(`%${key.toUpperCase()}%`, value);
+			template = template.replaceAll(`%${key.toUpperCase()}%`, value);
 		}
 
 		return template;

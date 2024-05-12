@@ -93,12 +93,35 @@
 .page__header-menu {
 	max-width: 1300px;
 	width: 100%;
+	display: flex;
+	justify-content: space-between;
 }
 
 .header-menu {
 	display: flex;
-	flex-direction: row-reverse;
-	justify-content: space-between;
+}
+
+.header-menu__link {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	padding: 0 25px;
+	box-sizing: border-box;
+	background: #419f68;
+	color: black;
+	font-size: 25px;
+	text-decoration: none;
+}
+
+.header-menu__link:hover {
+	background: #4bb979;
+	color: #efefef;
+}
+
+.login-or-logout-button {
+	height: 100%;
+	aspect-ratio: 1/1;
 }
 
 .logout-button,
@@ -138,7 +161,7 @@
 .tender-list-item {
 	width: 100%;
 	display: grid;
-	grid-template-columns: 1fr 3fr 1fr 1fr;
+	grid-template-columns: 70px 1fr 3fr 1fr 1fr;
 	justify-items: start;
 	align-items: center;
 	grid-column-gap: 20px;
@@ -162,6 +185,58 @@ tender-list__items {
 	display: contents;
 }
 
+.tender-list_without-buttons :where(.tender-list__header, .tender-list-item) {
+	grid-template-columns: 1fr 3fr 1fr 1fr;
+}
+
+.tender-list__header-buttons {
+	text-align: center;
+	width: 100%;
+}
+
+.tender-list_without-buttons :where(.tender-list-item__buttons, .tender-list__header-buttons) {
+	display: none;
+}
+
+.tender-list-item__buttons {
+	user-select: none;
+	user-select: none;
+	display: flex;
+	width: 100%;
+	justify-content: center;
+}
+
+.tender-list-item__buttons label {
+	font-size: 0;
+	width: 30px;
+	height: 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 1px solid black;
+	border-radius: 5px;
+	box-shadow: inset 0 0 2px black;
+}
+
+.tender-list-item__buttons input {
+	display: none;
+}
+
+.tender-list-item__buttons input:checked+label::after {
+	content: '\2713';
+	display: flex;
+	font-size: 30px;
+}
+
+.tender-list-item__buttons input:checked+label {
+	box-shadow: inset 0 0 4px black;
+}
+
+.tender-list-item__is-saved {
+	color: darkgreen;
+	font-weight: bold;
+}
+
 .tender__title {
 	font-weight: bold;
 	padding-bottom: 10px;
@@ -171,13 +246,27 @@ tender-list__items {
 	width: 100%;
 }
 
+.tender-search__forms {
+	display: flex;
+	align-items: center;
+}
+
 .tender-search__form {
-	width: 100%;
+	/* width: 100%; */
 	box-sizing: border-box;
-	padding: 20px 10px 10px;
 	font-size: 20px;
 	display: flex;
 	align-items: center;
+}
+
+.tender-search__form,
+:where(.tender-search__forms) .save-tenders-form {
+	padding: 20px 10px 10px;
+}
+
+:where(.tender-search__forms) .save-tenders-form__button {
+	height: 32px;
+	padding: 0px 15px;
 }
 
 .tender-search__label {
@@ -229,6 +318,10 @@ tender-list__items {
 .tender-search__note {
 	padding: 15px 10px 5px;
 	color: dimgrey;
+}
+
+.page-tender-import .tender_is-saved {
+	background-color: #0080004f;
 }
 
 .pagination {

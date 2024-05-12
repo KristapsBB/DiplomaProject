@@ -74,6 +74,10 @@ class AdminPanel extends Controller
 
         return $this->showView('tender-list-item', [
             'tender' => $tender_fields,
+            'item_data' => [
+                'editing_mode' => 'saving',
+                'is_saved' => false
+            ],
         ]);
     }
 
@@ -107,31 +111,25 @@ class AdminPanel extends Controller
     {
         $http = Core::getCurrentApp()->getHttp();
         $pub_numbers = $http->post('pub-numbers');
+        $search_query = implode(', ', $pub_numbers ?? []);
 
         $tender_search = new TenderSearch();
         $tender_search->setMode(TenderSearchMode::targeted->value);
-        $tender_search->fetchTendersFromApi(implode(', ', $pub_numbers));
+        $tender_search->fetchTendersFromApi($search_query);
 
         if (!empty($tender_search->getLastError())) {
-            return $this->sendJson([
-                'error' => $tender_search->getLastError(),
-            ]);
-        }
-
-        $tender_list = $tender_search->getTenderList();
-        $saving_status = [];
-        /**
-         * @var Tender $tender
-         */
-        foreach ($tender_list->getTenders() as $tender) {
-            $pub_num = $tender->publication_number;
-
-            if (!$tender_list->isTenderSaved($pub_num)) {
-                $saving_status[$pub_num] = ($tender->save()) ? 'saved' : 'failed';
+            if ('json' === $http->post('format')) {
+                return $this->sendJson([
+                    'error' => $tender_search->getLastError(),
+                ]);
             } else {
-                $saving_status[$pub_num] = 'already-exists';
+                return $this->showView('error', [
+                    'error' => $tender_search->getLastError()
+                ], [], 400);
             }
         }
+
+        $saving_status = $tender_search->getTenderList()->saveList();
 
         if ('json' === $http->post('format')) {
             return $this->sendJson([
@@ -140,5 +138,14 @@ class AdminPanel extends Controller
         } else {
             return $this->toUrl($http->getReferer());
         }
+    }
+
+    public function savedTenders()
+    {
+        $saved_tenders = new TenderList(Tender::findAll());
+
+        return $this->showView('saved-tenders', [
+            'saved_tenders' => $saved_tenders,
+        ]);
     }
 }

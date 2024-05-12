@@ -55,4 +55,39 @@ class TenderList
 
         return (false !== array_search($publication_number, $pub_nums));
     }
+
+    /**
+     * returns array in the format:
+     * ```php
+     * [
+     *     (int) publication_number => 'saved'
+     *     (int) publication_number => 'saved'
+     *     (int) publication_number => 'failed'
+     *     (int) publication_number => 'saved'
+     *     (int) publication_number => 'already-exists'
+     * ]
+     * ```
+     */
+    public function saveList(): array
+    {
+        $saving_status = [];
+        /**
+         * @var Tender $tender
+         */
+        foreach ($this->getTenders() as $tender) {
+            $pub_num = $tender->publication_number;
+
+            if (!$this->isTenderSaved($pub_num)) {
+                if ($tender->save()) {
+                    $saving_status[$pub_num] = 'saved';
+                } else {
+                    $saving_status[$pub_num] = 'failed';
+                }
+            } else {
+                $saving_status[$pub_num] = 'already-exists';
+            }
+        }
+
+        return $saving_status;
+    }
 }

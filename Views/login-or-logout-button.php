@@ -6,7 +6,7 @@
 ?>
 
 <form
-    class="header-menu <?php echo $this->params['block-style-class']; ?>"
+    class="<?php echo $this->params['block-style-class']; ?>"
     method="POST"
     action="/authentication/logout"
     >
