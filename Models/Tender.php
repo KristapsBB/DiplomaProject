@@ -2,7 +2,7 @@
 
 namespace DiplomaProject\Models;
 
-use DiplomaProject\Core\DbModel;
+use DiplomaProject\Core\Models\DbModel;
 
 class Tender extends DbModel
 {

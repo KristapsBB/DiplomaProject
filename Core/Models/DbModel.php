@@ -1,6 +1,8 @@
 <?php
 
-namespace DiplomaProject\Core;
+namespace DiplomaProject\Core\Models;
+
+use DiplomaProject\Core\Core;
 
 /**
  * all find, update, insert, etc. methods work only with fields specified in static::$db_columns

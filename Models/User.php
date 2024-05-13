@@ -3,7 +3,7 @@
 namespace DiplomaProject\Models;
 
 use DiplomaProject\Core\Core;
-use DiplomaProject\Core\DbModel;
+use DiplomaProject\Core\Models\DbModel;
 use DiplomaProject\Core\Interfaces\DataBaseModelInterface;
 use DiplomaProject\Core\Interfaces\UserInterface;
 
