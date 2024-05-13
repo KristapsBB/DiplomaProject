@@ -37,10 +37,9 @@ class AdminPanel extends Controller
         $http = Core::getCurrentApp()->getHttp();
 
         $search_query = trim($http->get('search-query'));
-        $page = $http->get('page') ?? 1;
-        $page = (int) $page;
-
+        $page = (int) ($http->get('page') ?? 1);
         $mode = $http->get('mode') ?? '';
+
         $tender_search = new TenderSearch($mode);
 
         if (null !== $search_query) {
@@ -49,7 +48,7 @@ class AdminPanel extends Controller
 
         $pagination = new Pagination(
             $page,
-            $tender_search->countPages() ?? 0,
+            $tender_search->countPages(),
             "?search-query={$search_query}&mode={$mode}&page="
         );
 
@@ -62,10 +61,9 @@ class AdminPanel extends Controller
 
     public function getTenderTemplate()
     {
-        $tender = Tender::getStub();
-        $tender_fields = $tender->getFields();
+        $tender_fields = Tender::getStub()->getFields();
 
-        foreach ($tender_fields as $field_name => $value) {
+        foreach (array_keys($tender_fields) as $field_name) {
             $tender_fields[$field_name] = '%' . strtoupper($field_name) . '%';
         }
 

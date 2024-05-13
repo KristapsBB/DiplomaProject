@@ -10,13 +10,12 @@ class Authentication extends Controller
 {
     public function login()
     {
-        $error = null;
+        $page_after_logging_in = '/admin-panel/import-tenders';
+        $auth = Core::getCurrentApp()->getAuthentication();
 
-        $authentication = Core::getCurrentApp()->getAuthentication();
-        $curr_user = $authentication->getCurrentUser();
-
+        $curr_user = $auth->getCurrentUser();
         if ($curr_user->validateToken()) {
-            return $this->toUrl('/admin-panel/import-tenders');
+            return $this->toUrl($page_after_logging_in);
         }
 
         $http = Core::getCurrentApp()->getHttp();
@@ -24,33 +23,36 @@ class Authentication extends Controller
         if (!empty($http->post('login-form')) && $http->isPost()) {
             $form_data = $http->post('login-form');
 
-            $login_form = new LoginForm();
-            $login_form->login = $form_data['login'];
-            $login_form->password = $form_data['password'];
+            $login_form = new LoginForm(
+                $form_data['login'],
+                $form_data['password']
+            );
 
             if ($login_form->validateForm()) {
-                $user = $authentication->getUserByLogin($login_form->login);
-                $authentication->authenticate($user);
+                $auth->authenticate(
+                    $auth->getUserByLogin($login_form->login)
+                );
 
-                return $this->toUrl('/admin-panel/import-tenders');
+                return $this->toUrl($page_after_logging_in);
             }
 
             $error = $login_form->getLastError();
         }
 
         return $this->showView('login', [
-            'error' => $error,
+            'error' => $error ?? '',
         ]);
     }
 
     public function logout()
     {
         $http = Core::getCurrentApp()->getHttp();
-        $authentication = Core::getCurrentApp()->getAuthentication();
+        $auth = Core::getCurrentApp()->getAuthentication();
 
         if ($http->isPost() && $this->isCurrUserLoggedIn()) {
-            $curr_user = $authentication->getCurrentUser();
-            $authentication->logout($curr_user);
+            $auth->logout(
+                $auth->getCurrentUser()
+            );
         }
 
         return $this->toUrl('/login');

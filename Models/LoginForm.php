@@ -7,8 +7,12 @@ use DiplomaProject\Core\Core;
 class LoginForm
 {
     private array $errors = [];
-    public string $login;
-    public string $password;
+
+    public function __construct(
+        public string $login,
+        public string $password
+    ) {
+    }
 
     public function validateForm(): bool
     {
