@@ -1,8 +1,6 @@
-<?php
-
-/**
- * Creating table `tenders`
- */
+#
+# Creating table `tenders`
+#
 
 CREATE TABLE `diploma_project_db`.`tenders` (
     `id` INT NOT NULL AUTO_INCREMENT ,
