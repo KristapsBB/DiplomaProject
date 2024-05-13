@@ -7,11 +7,17 @@ class TenderList
     private $total_tenders_count = 0;
     private ?array $numbers_of_existing = null;
 
+    /**
+     * @param Tender[] $tenders
+     */
     public function __construct(private array $tenders = [])
     {
         $this->total_tenders_count = count($tenders);
     }
 
+    /**
+     * @return Tender[] $tenders
+     */
     public function getTenders(): array
     {
         return $this->tenders;
@@ -23,16 +29,15 @@ class TenderList
     }
 
     /**
-     * returns the publication numbers of the tenders  that exist in the database,
+     * returns the publication numbers of the tenders that exist in the database
+     *
+     * @return string[]
      */
-    public function getNumbersOfExisting(bool $reset_cache = false)
+    public function getNumbersOfExisting(bool $reset_cache = false): array
     {
         if (null === $this->numbers_of_existing || $reset_cache) {
             $pub_nums = [];
 
-            /**
-             * @var Tender $tender
-             */
             foreach ($this->tenders as $tender) {
                 $pub_nums[] = $tender->publication_number;
             }
@@ -67,13 +72,12 @@ class TenderList
      *     (int) publication_number => 'already-exists'
      * ]
      * ```
+     *
+     * @return string[]
      */
     public function saveList(): array
     {
         $saving_status = [];
-        /**
-         * @var Tender $tender
-         */
         foreach ($this->getTenders() as $tender) {
             $pub_num = $tender->publication_number;
 
