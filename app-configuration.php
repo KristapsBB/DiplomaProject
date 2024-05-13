@@ -27,7 +27,7 @@ return [
         'asset-manager' => [
             'class' => \DiplomaProject\Core\Modules\AssetManager::class,
             'params' => [
-                'path_to_assets' => 'assets',
+                'path_to_assets' => 'public/assets',
             ],
         ],
         'security' => [

@@ -13,6 +13,7 @@ class AssetManager
      * the path from the application root to the asset directory
      */
     private string $path_to_assets = 'assets/';
+    private string $url_to_assets = 'assets/';
     private array $assets_list = [];
     private array $enqueued_assets = [];
 
@@ -35,6 +36,11 @@ class AssetManager
     public function getPathToAssets(): string
     {
         return $this->path_to_assets;
+    }
+
+    public function getUrlToAssets(): string
+    {
+        return $this->url_to_assets;
     }
 
     public function generatePathToAsset(string $asset_uri): string
@@ -217,7 +223,7 @@ class AssetManager
         $http = Core::getCurrentApp()->getHttp();
 
         $asset_url = $http->generateUrl(
-            '/' . $this->getPathToAssets() . $asset_uri,
+            '/' . $this->getUrlToAssets() . $asset_uri,
             !empty($version) ? ['version' => $version] : null
         );
 
