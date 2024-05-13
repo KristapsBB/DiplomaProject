@@ -74,7 +74,7 @@ class AdminPanel extends Controller
             'tender' => $tender_fields,
             'item_data' => [
                 'editing_mode' => 'saving',
-                'is_saved' => false
+                'is_saved_css_class' => '%IS_SAVED_CSS_CLASS%',
             ],
         ]);
     }
@@ -90,10 +90,15 @@ class AdminPanel extends Controller
         $tender_search = new TenderSearch($mode);
         $tender_search->fetchTendersFromApi($search_query, $page);
 
-        $tenders = $tender_search->getTenderList()->getTenders();
+        $tender_list = $tender_search->getTenderList();
 
-        foreach ($tenders as $key => $tender) {
+        $tenders = [];
+        foreach ($tender_list->getTenders() as $key => $tender) {
             $tenders[$key] = $tender->getFields();
+
+            if ($tender_list->isTenderSaved($tender->publication_number)) {
+                $tenders[$key]['is_saved_css_class'] = 'tender_is-saved';
+            }
         }
 
         $response = [

@@ -400,3 +400,16 @@ tender-list__items {
 	flex-direction: row;
 	justify-content: space-between;
 }
+
+.tender_is-saved .tender-list-item__is-saved {
+	display: block;
+	text-align: center;
+}
+
+.searched-tenders .tender_is-saved :is(label, input) {
+	display: none;
+}
+
+.tender-list-item__is-saved {
+	display: none;
+}

@@ -34,12 +34,13 @@ if ($this->params['without-buttons']) {
             /**
              * @var Tender $tender
              */
-            foreach ($tender_list->getTenders() as $tender) : ?>
+            foreach ($tender_list->getTenders() as $tender) :
+                $is_saved = $tender_list->isTenderSaved($tender->publication_number); ?>
                 <?php $this->showView('tender-list-item', [
                     'tender' => $tender->getFields(),
                     'item_data' => [
                         'editing_mode' => $this->params['editing_mode'] ?? '',
-                        'is_saved' => $tender_list->isTenderSaved($tender->publication_number),
+                        'is_saved_css_class' => ($is_saved) ? 'tender_is-saved' : '',
                     ],
                 ]); ?>
             <?php endforeach; ?>

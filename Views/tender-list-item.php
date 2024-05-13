@@ -19,7 +19,7 @@ switch ($item_data['editing_mode'] ?? '') {
 }
 ?>
 
-<div class="tender-list-item tender <?php echo (($item_data['is_saved'])) ? 'tender_is-saved' : ''?>">
+<div class="tender-list-item tender <?php echo $item_data['is_saved_css_class']; ?>">
     <?php
     if (!empty($buttons_view)) {
         $this->showView($buttons_view, [
