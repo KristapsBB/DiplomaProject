@@ -175,15 +175,6 @@ class TenderTemplater {
 
 		return tender_list;
 	}
-
-	async generateTenderList(page_number, query_string) {
-		await this.initTenderTemplate();
-
-		let tenders_data = await this.getTendersData(page_number, query_string);
-		let tender_list = this.buildTenderList(tenders_data);
-
-		return tender_list;
-	}
 }
 
 class Pagination {
