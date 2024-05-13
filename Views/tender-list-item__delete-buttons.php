@@ -17,7 +17,7 @@ $pub_num = HtmlHelper::getEsc($tender['publication_number']);
         type="checkbox"
         name="pub-numbers[<?php echo $pub_num ?>]"
         value="<?php echo $pub_num; ?>"
-        form="delete-tenders-form"
+        form="tenders-form"
         >
     <label for="tender-<?php echo $pub_num ?>">detele</label>
 </div>

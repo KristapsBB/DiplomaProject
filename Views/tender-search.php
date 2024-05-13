@@ -31,8 +31,8 @@ $search = $this->params['search'];
                 <?php endforeach; ?>
             </select>
         </form>
-        <form class="save-tenders-form" action="/admin-panel/search-and-save" method="post" id="save-tenders-form">
-            <button type="submit" class="save-tenders-form__button">save selected tenders</button>
+        <form class="tenders-form" action="/admin-panel/search-and-save" method="post" id="save-tenders-form">
+            <button type="submit" class="tenders-form__button">save selected tenders</button>
         </form>
     </div>
     <div class="tender-search__note">

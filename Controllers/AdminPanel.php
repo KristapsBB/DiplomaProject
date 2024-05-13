@@ -7,6 +7,7 @@ use DiplomaProject\Core\Core;
 use DiplomaProject\Enums\TenderSearchMode;
 use DiplomaProject\Models\Pagination;
 use DiplomaProject\Models\Tender;
+use DiplomaProject\Models\TenderExporter;
 use DiplomaProject\Models\TenderList;
 use DiplomaProject\Models\TenderSearch;
 
@@ -17,7 +18,7 @@ class AdminPanel extends Controller
         /**
          * names of methods that can only be accessed by a POST request
          */
-        $onlyPost = ['searchAndSave', 'deleteTenders'];
+        $onlyPost = ['searchAndSave', 'deleteTenders', 'downloadTenderTable'];
 
         if (!$this->isAdmin()) {
             return $this->showView('error', ['error' => 'Access denied'], [], 403);
@@ -147,7 +148,7 @@ class AdminPanel extends Controller
     public function deleteTenders()
     {
         $http = Core::getCurrentApp()->getHttp();
-        $pub_numbers = $http->post('pub-numbers');
+        $pub_numbers = $http->post('pub-numbers') ?? [];
 
         if (!is_array($pub_numbers)) {
             return $this->showView('error', [
@@ -170,5 +171,40 @@ class AdminPanel extends Controller
         } else {
             return $this->toUrl($http->getReferer());
         }
+    }
+
+    public function downloadTenderTable()
+    {
+        $http = Core::getCurrentApp()->getHttp();
+        $get_all_tenders = (bool) $http->post('get-all-tenders') ?? false;
+        $pub_numbers = $http->post('pub-numbers') ?? [];
+
+        if (!is_array($pub_numbers) && (true !== $get_all_tenders)) {
+            return $this->showView('error', [
+                'error' => 'array of publication numbers was expected'
+            ], [], 400);
+        }
+
+        $tenders = [];
+        if (true === $get_all_tenders) {
+            $tenders = Tender::findAll('publication_number');
+        } else {
+            foreach ($pub_numbers as $pub_number) {
+                $tenders[] = Tender::findOneBy('publication_number', $pub_number);
+            }
+        }
+
+        $root = Core::getCurrentApp()->getAppRoot();
+        $fullpath = $root . 'tender-table.xlsx';
+
+        if (!(new TenderExporter())->buildXlsxFile($fullpath, $tenders)) {
+            if (!is_array($pub_numbers)) {
+                return $this->showView('error', [
+                    'error' => 'the file could not be created'
+                ], [], 500);
+            }
+        }
+
+        return $this->sendFile($fullpath);
     }
 }

@@ -13,10 +13,22 @@ $this->setBodyClass('page page-saved-tenders');
 $saved_tenders = $this->params['saved_tenders'];
 ?>
 
-
-<form class="delete-tenders-form" action="/admin-panel/delete-tenders" method="post" id="delete-tenders-form">
-    <button type="submit" class="save-tenders-form__button">delete selected tenders</button>
-</form>
+<div class="saved-tenders__forms">
+    <form class="tenders-form" method="post" id="download-all-tenders-form">
+        <input type="hidden" name="get-all-tenders" value="true">
+        <button type="submit" class="tenders-form__button" formaction="/admin-panel/download-tender-table">
+            download all tenders
+        </button>
+    </form>
+    <form class="tenders-form" method="post" id="tenders-form">
+        <button type="submit" class="tenders-form__button" formaction="/admin-panel/download-tender-table">
+            download selected tenders
+        </button>
+        <button type="submit" class="tenders-form__button detele-button" formaction="/admin-panel/delete-tenders">
+            delete selected tenders
+        </button>
+    </form>
+</div>
 
 <?php $this->showView('tender-list', [
     'tender_list' => $saved_tenders,

@@ -8,6 +8,10 @@ use DiplomaProject\Exceptions\TendersApiException;
 class TenderSearch
 {
     private $search_query = '';
+
+    /**
+     * @var Tender[] $tenders
+     */
     private array $tenders = [];
     private int $total_tenders_count = 0;
     private int $tenders_per_page = 10;
