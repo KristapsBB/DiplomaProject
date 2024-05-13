@@ -2,6 +2,8 @@
 
 namespace DiplomaProject\Core;
 
+use DiplomaProject\Core\Response;
+
 /**
  * Singleton & Dependency Injection
  */
@@ -148,28 +150,23 @@ class Core
         $controller = new $controller_class();
 
         if (method_exists($controller, 'before')) {
-            $result = $controller->before($method_name);
+            /**
+             * @var ?Response $response
+             */
+            $response = $controller->before($method_name);
         }
 
-        if (null === $result) {
-            $result = $controller->$method_name();
+        if (null === $response) {
+            /**
+             * @var ?Response $response
+             */
+            $response = $controller->$method_name();
         }
 
         /**
          * showing view, redirection, etc
          */
-        switch ($result->getType()) {
-            case 'view':
-                return $this->getViewer()->showLayout($result);
-                break;
-            case 'url':
-                $url = $this->getHttp()->generateUrl($result->uri, $result->params);
-                return $this->getHttp()->redirect($url, $result->http_code);
-                break;
-            case 'json':
-                echo json_encode($result->data, JSON_HEX_QUOT);
-                break;
-        }
+        $response?->send();
     }
 
     public function run(string $config_name = 'default')

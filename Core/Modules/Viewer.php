@@ -3,7 +3,6 @@
 namespace DiplomaProject\Core\Modules;
 
 use DiplomaProject\Core\Core;
-use DiplomaProject\Core\Models\ViewParams;
 use DiplomaProject\Core\Module;
 
 class Viewer extends Module
@@ -126,17 +125,19 @@ class Viewer extends Module
         $this->popParams();
     }
 
-    public function showLayout(ViewParams $view_params)
-    {
+    public function showLayout(
+        string $view_name,
+        array $params = [],
+        array $page_params = [],
+        int $http_code = 200
+    ) {
         $this->initSystemAssets();
 
-        $this->page_params = $view_params->page_params;
-        $this->page_params['is_user_logged_in'] = $view_params->is_user_logged_in;
-        $this->params = $view_params->params;
-        $this->http_code = $view_params->http_code;
+        $this->page_params = $page_params;
+        $this->http_code = $http_code;
 
         ob_start();
-        $this->showView($view_params->view_name, $view_params->params);
+        $this->showView($view_name, $params);
         $this->root_view_contents = ob_get_contents();
         ob_end_clean();
 
