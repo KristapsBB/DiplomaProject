@@ -161,7 +161,8 @@ class ExcelBuilder
             ->setHorizontal($horizontal);
     }
 
-    public function setBodyFont(int $font_size = 12, bool $bold = false) {
+    public function setBodyFont(int $font_size = 12, bool $bold = false)
+    {
         $sheet = $this->spreadsheet->getActiveSheet();
 
         $maxRow = $sheet->getHighestDataRow();

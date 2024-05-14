@@ -52,7 +52,7 @@ class Controller
 
     public function sendFile(string $path, int $http_code = 200): Response
     {
-        $headers =[
+        $headers = [
             ['Content-Description: File Transfer'],
             ['Content-Type: application/octet-stream'],
             ['Content-Disposition: attachment; filename=' . basename($path)],
