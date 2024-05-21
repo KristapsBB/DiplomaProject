@@ -5,6 +5,7 @@ namespace DiplomaProject\Core\Modules;
 class Router
 {
     private string $error_controller = '';
+    private string $index_controller = '';
     private array $controller_map = [];
     private string $current_route;
 
@@ -14,6 +15,7 @@ class Router
     public function configure(array $params)
     {
         $this->setErrorController($params['error_controller']);
+        $this->setIndexController($params['index_controller']);
         $this->setControllerMap($params['controller_map']);
     }
 
@@ -26,9 +28,23 @@ class Router
         $this->error_controller = $error_controller;
     }
 
+    public function setIndexController(string $index_controller)
+    {
+        if (!class_exists($index_controller)) {
+            throw new \Exception("class '$index_controller' not found");
+        }
+
+        $this->index_controller = $index_controller;
+    }
+
     public function getErrorController(): string
     {
         return $this->error_controller;
+    }
+
+    public function getIndexController(): string
+    {
+        return $this->index_controller;
     }
 
     public function setControllerMap(array $controller_map)
@@ -46,6 +62,12 @@ class Router
     public function parseRoute()
     {
         $route = strtolower($this->current_route);
+
+        if (empty($route) || '/' === $route) {
+            $this->current_controller = $this->getIndexController();
+            $this->current_method     = 'default';
+            return;
+        }
 
         if ('/' === $route[0]) {
             $route = substr($route, 1);

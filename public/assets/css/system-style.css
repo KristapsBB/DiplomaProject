@@ -20,6 +20,7 @@
 	background: #3c3c3c;
 }
 
+.index-block,
 .login-block,
 .error-block {
 	display: flex;
@@ -27,7 +28,9 @@
 	justify-content: center;
 	align-items: center;
 	padding: 30px;
-	width: 500px;
+	max-width: 700px;
+	width: 100%;
+	box-sizing: border-box;
 	background-color: white;
 	border: 1px solid rgb(118 118 118);
 	margin: 90px 25px;
@@ -84,6 +87,7 @@
 	background-color: #40cf40;
 }
 
+.index-block__message,
 .error-block__message {
 	font-size: 30px;
 	margin-top: 50px;

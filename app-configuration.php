@@ -47,6 +47,7 @@ return [
             'class' => \DiplomaProject\Core\Modules\Router::class,
             'params' => [
                 'error_controller' => \DiplomaProject\Controllers\Errors::class,
+                'index_controller' => \DiplomaProject\Controllers\IndexPage::class,
                 'controller_map' => [
                     'authentication' => \DiplomaProject\Controllers\Authentication::class,
                     'login'          => \DiplomaProject\Controllers\Authentication::class,
