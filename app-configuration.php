@@ -14,7 +14,7 @@ return [
         'http' => [
             'class' => \DiplomaProject\Core\Modules\Http::class,
             'params' => [
-                'base_url' => $_SERVER['SERVER_NAME'],
+                'base_url' => $_SERVER['SERVER_NAME'] ?? '',
             ]
         ],
         'viewer' => [
@@ -54,6 +54,24 @@ return [
                     'admin-panel'    => \DiplomaProject\Controllers\AdminPanel::class,
                 ],
             ],
+        ],
+        'logger' => [
+            'class'  => DiplomaProject\Core\Modules\Logger::class,
+            'params' => [
+                'logsdir' => 'runtime/logs',
+                'level'   => 20,
+            ]
+        ]
+    ],
+    'console' => [
+        'db' => [
+            'class' => \DiplomaProject\Core\Modules\DataBase::class,
+            'params' => [
+                'hostname' => 'localhost', // 127.0.0.1
+                'username' => 'diploma_project_admin',
+                'password' => '123',
+                'database' => 'diploma_project_db',
+            ]
         ],
         'logger' => [
             'class'  => DiplomaProject\Core\Modules\Logger::class,

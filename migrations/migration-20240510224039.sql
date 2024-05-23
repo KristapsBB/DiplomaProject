@@ -2,7 +2,7 @@
 # Creating table `tenders`
 #
 
-CREATE TABLE `diploma_project_db`.`tenders` (
+CREATE TABLE IF NOT EXISTS `tenders` (
     `id` INT NOT NULL AUTO_INCREMENT ,
     `publication_number` VARCHAR(16) NOT NULL ,
     `publication_date` DATE NOT NULL ,
@@ -13,4 +13,5 @@ CREATE TABLE `diploma_project_db`.`tenders` (
     `deadline` DATE ,
     `link` VARCHAR(60) NOT NULL ,
     PRIMARY KEY (`id`),
-UNIQUE (`publication_number`)) ENGINE = InnoDB;
+    UNIQUE (`publication_number`)
+) ENGINE = InnoDB;

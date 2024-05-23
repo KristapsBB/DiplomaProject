@@ -2,6 +2,7 @@
 
 namespace DiplomaProject\Core;
 
+use DiplomaProject\Core\Models\Migration;
 use DiplomaProject\Core\Response;
 
 /**
@@ -221,6 +222,27 @@ class Core
 
         try {
             $this->processRequest();
+        } catch (\Throwable $e) {
+            Core::error($e->getMessage());
+            Core::error($e->getTraceAsString());
+            echo $e->getMessage();
+            var_dump($e);
+        }
+    }
+
+    public function migrationsUp(string $config_name = 'console')
+    {
+        $this->configure($config_name);
+        $root = self::getCurrentApp()->getAppRoot();
+
+        try {
+            $migrations = [];
+            foreach (glob($root . 'migrations/migration-*?') as $migration_name) {
+                $migrations[basename($migration_name, '.sql')] = file_get_contents($migration_name);
+            }
+
+            Migration::initTable();
+            Migration::upAll($migrations);
         } catch (\Throwable $e) {
             Core::error($e->getMessage());
             Core::error($e->getTraceAsString());
