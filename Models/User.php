@@ -15,19 +15,19 @@ class User extends DbModel implements UserInterface, DataBaseModelInterface
         'login',
         'password',
         'token',
-        'status',
+        'access_level',
     ];
 
     private array $errors = [];
 
-    public const STATUS_GUEST = 0;
-    public const STATUS_ADMIN = 5;
+    public const ACCESS_LEVEL_GUEST = 0;
+    public const ACCESS_LEVEL_ADMIN = 5;
 
     public int $id;
     public string $login;
     public string $password;
     public string $token;
-    public int $status;
+    public int $access_level;
 
     public static function getUserByLogin(string $login): ?self
     {
@@ -42,13 +42,13 @@ class User extends DbModel implements UserInterface, DataBaseModelInterface
     public static function getGuest(): self
     {
         $guest = new self();
-        $guest->status = self::STATUS_GUEST;
+        $guest->access_level = self::ACCESS_LEVEL_GUEST;
         return $guest;
     }
 
     public function isAdmin(): bool
     {
-        return (self::STATUS_ADMIN === $this->status);
+        return (self::ACCESS_LEVEL_ADMIN === $this->access_level);
     }
 
     public function setToken(string $token)
