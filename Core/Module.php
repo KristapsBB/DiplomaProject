@@ -2,8 +2,26 @@
 
 namespace DiplomaProject\Core;
 
+use DiplomaProject\Core\Libs\StringHelper;
+
 class Module
 {
+    private bool $is_configured = false;
+
+    public function configure(array $params)
+    {
+        if ($this->is_configured) {
+            return;
+        }
+
+        foreach ($params as $param_name => $param_value) {
+            $setter_name = StringHelper::toPascalCase($param_name, '_');
+            $this->{'set' . $setter_name}($param_value);
+        }
+
+        $this->is_configured = true;
+    }
+
     /**
      * @var callable[][]
      *

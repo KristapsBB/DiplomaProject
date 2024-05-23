@@ -24,12 +24,6 @@ class Viewer extends Module
      */
     public int $http_code = 500;
 
-    public function configure(array $config_params)
-    {
-        $this->setLayout($config_params['layout_path']);
-        $this->setMaxNestingDepth($config_params['max_nesting_depth']);
-    }
-
     public function initSystemAssets()
     {
         $asset_manager = Core::getCurrentApp()->getAssetManager();
@@ -51,12 +45,17 @@ class Viewer extends Module
         $this->onHead([$asset_manager, 'printEnqueuedScripts'], 'system-js');
     }
 
-    public function setLayout(string $layout_path)
+    protected function setLayoutPath(string $layout_path)
     {
         $this->layout_path = $layout_path;
     }
 
-    public function setMaxNestingDepth(int $max_nesting_depth)
+    public function changeLayout(string $layout_path)
+    {
+        $this->setLayoutPath($layout_path);
+    }
+
+    protected function setMaxNestingDepth(int $max_nesting_depth)
     {
         $this->max_nesting_depth = $max_nesting_depth;
     }

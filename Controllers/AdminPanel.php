@@ -68,7 +68,7 @@ class AdminPanel extends Controller
             $tender_fields[$field_name] = '%' . strtoupper($field_name) . '%';
         }
 
-        Core::getCurrentApp()->getViewer()->setLayout('empty-layout');
+        Core::getCurrentApp()->getViewer()->changeLayout('empty-layout');
 
         return $this->showView('tender-list-item', [
             'tender' => $tender_fields,

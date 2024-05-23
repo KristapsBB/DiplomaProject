@@ -3,8 +3,9 @@
 namespace DiplomaProject\Core\Modules;
 
 use DiplomaProject\Core\Libs\StringHelper;
+use DiplomaProject\Core\Module;
 
-class Router
+class Router extends Module
 {
     private string $error_controller = '';
     private string $index_controller = '';
@@ -14,14 +15,7 @@ class Router
     private string $current_controller = '';
     private string $current_method = '';
 
-    public function configure(array $params)
-    {
-        $this->setErrorController($params['error_controller']);
-        $this->setIndexController($params['index_controller']);
-        $this->setControllerMap($params['controller_map']);
-    }
-
-    public function setErrorController(string $error_controller)
+    protected function setErrorController(string $error_controller)
     {
         if (!class_exists($error_controller)) {
             throw new \Exception("class '$error_controller' not found");
@@ -30,7 +24,7 @@ class Router
         $this->error_controller = $error_controller;
     }
 
-    public function setIndexController(string $index_controller)
+    protected function setIndexController(string $index_controller)
     {
         if (!class_exists($index_controller)) {
             throw new \Exception("class '$index_controller' not found");
@@ -49,7 +43,7 @@ class Router
         return $this->index_controller;
     }
 
-    public function setControllerMap(array $controller_map)
+    protected function setControllerMap(array $controller_map)
     {
         $this->controller_map = $controller_map;
     }

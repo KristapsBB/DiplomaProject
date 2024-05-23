@@ -3,8 +3,9 @@
 namespace DiplomaProject\Core\Modules;
 
 use DiplomaProject\Core\Core;
+use DiplomaProject\Core\Module;
 
-class AssetManager
+class AssetManager extends Module
 {
     private const ASSET_TYPE_STYLE = 'style';
     private const ASSET_TYPE_SCRIPT = 'script';
@@ -17,15 +18,10 @@ class AssetManager
     private array $assets_list = [];
     private array $enqueued_assets = [];
 
-    public function configure(array $config_params)
-    {
-        $this->setPathToAssets($config_params['path_to_assets']);
-    }
-
     /**
      * sets the path from the application root to the asset directory
      */
-    public function setPathToAssets(string $path_to_assets = 'assets')
+    protected function setPathToAssets(string $path_to_assets = 'assets')
     {
         $this->path_to_assets = $path_to_assets . '/';
     }

@@ -5,8 +5,9 @@ namespace DiplomaProject\Core\Modules;
 use DiplomaProject\Core\Core;
 use DiplomaProject\Core\Interfaces\DataBaseModelInterface;
 use DiplomaProject\Core\Interfaces\UserInterface;
+use DiplomaProject\Core\Module;
 
-class Authentication
+class Authentication extends Module
 {
     /**
      * @var UserInterface&DataBaseModelInterface
@@ -18,21 +19,15 @@ class Authentication
      */
     private int $token_lifetime = 0;
 
-    public function configure(array $params)
-    {
-        $this->setUserClass($params['user_class']);
-        $this->setTokenLifetime($params['token_lifetime']);
-    }
-
     /**
      * @param int $lifetime token lifetime in minutes
      */
-    public function setTokenLifetime(int $lifetime)
+    protected function setTokenLifetime(int $lifetime)
     {
         $this->token_lifetime = $lifetime;
     }
 
-    public function setUserClass(string $user_class)
+    protected function setUserClass(string $user_class)
     {
         if (!class_exists($user_class)) {
             throw new \Exception("class '{$user_class}' not found");

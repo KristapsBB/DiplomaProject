@@ -2,16 +2,13 @@
 
 namespace DiplomaProject\Core\Modules;
 
-class Http
+use DiplomaProject\Core\Module;
+
+class Http extends Module
 {
     public $base_url = '';
 
-    public function configure(array $params)
-    {
-        $this->setBaseUrl($params['base_url']);
-    }
-
-    private function setBaseUrl(string $base_url)
+    protected function setBaseUrl(string $base_url)
     {
         $this->base_url = $base_url;
     }

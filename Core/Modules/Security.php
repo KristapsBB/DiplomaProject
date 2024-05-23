@@ -2,16 +2,13 @@
 
 namespace DiplomaProject\Core\Modules;
 
-class Security
+use DiplomaProject\Core\Module;
+
+class Security extends Module
 {
     private string $salt = '';
 
-    public function configure(array $params)
-    {
-        $this->setSalt($params['salt']);
-    }
-
-    public function setSalt(string $salt)
+    protected function setSalt(string $salt)
     {
         $this->salt = $salt;
     }
