@@ -2,6 +2,8 @@
 
 namespace DiplomaProject\Core\Modules;
 
+use DiplomaProject\Core\Libs\StringHelper;
+
 class Router
 {
     private string $error_controller = '';
@@ -84,7 +86,7 @@ class Router
         $this->current_controller = $this->controller_map[$controller_name];
 
         if (!empty($method_name)) {
-            $method_name = self::toCamelCase($method_name);
+            $method_name = StringHelper::toCamelCase($method_name, '-');
         } else {
             $method_name = 'default';
         }
@@ -104,28 +106,5 @@ class Router
     public function getMethod(): string
     {
         return $this->current_method;
-    }
-
-    /**
-     * "admin-panel" => "AdminPanel"
-     */
-    public static function toPascalCase(string $kebab_case): string
-    {
-        $words = explode('-', $kebab_case);
-        $words = array_map('strtolower', $words);
-        $words = array_map('ucfirst', $words);
-        $pascal_case = implode('', $words);
-
-        return $pascal_case;
-    }
-
-    /**
-     * "admin-panel" => "AdminPanel"
-     */
-    public static function toCamelCase(string $kebab_case): string
-    {
-        $camel_case = lcfirst(self::toPascalCase($kebab_case));
-
-        return $camel_case;
     }
 }
