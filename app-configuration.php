@@ -55,5 +55,12 @@ return [
                 ],
             ],
         ],
+        'logger' => [
+            'class'  => DiplomaProject\Core\Modules\Logger::class,
+            'params' => [
+                'logsdir' => 'runtime/logs',
+                'level'   => 20,
+            ]
+        ]
     ]
 ];

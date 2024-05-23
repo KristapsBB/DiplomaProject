@@ -20,6 +20,7 @@ class Module
         }
 
         $this->is_configured = true;
+        Core::info(static::class . ' module is configured');
     }
 
     /**

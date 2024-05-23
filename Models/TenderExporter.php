@@ -2,6 +2,8 @@
 
 namespace DiplomaProject\Models;
 
+use DiplomaProject\Core\Core;
+
 class TenderExporter
 {
     /**
@@ -36,6 +38,8 @@ class TenderExporter
 
             $xlsx_builder->createFile($fullpath);
         } catch (\Exception $e) {
+            Core::error($e->getMessage());
+            Core::error($e->getTraceAsString());
             return false;
         }
 

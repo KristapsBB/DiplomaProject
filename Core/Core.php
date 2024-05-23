@@ -39,9 +39,20 @@ class Core
     {
         $this->root = dirname(__DIR__) . '/';
 
-        $app_config = require_once($this->root . 'app-configuration.php');
+        $app_configs = require_once($this->root . 'app-configuration.php');
+        $current_config = $app_configs[$config_name];
 
-        foreach ($app_config[$config_name] as $module_name => $module_config) {
+        if (array_key_exists('logger', $current_config)) {
+            $logger_conf = $current_config['logger'];
+            unset($current_config['logger']);
+
+            $current_config = array_merge(
+                ['logger' => $logger_conf],
+                $current_config
+            );
+        }
+
+        foreach ($current_config as $module_name => $module_config) {
             $module_class = $module_config['class'] ?? '';
 
             if (empty($module_class) || !is_string($module_class) || !class_exists($module_class)) {
@@ -54,6 +65,8 @@ class Core
             $module->configure($module_config['params'] ?? []);
             $this->modules[$module_name] = $module;
         }
+
+        self::info('Core is configured');
     }
 
     private function getModule(string $module_name)
@@ -130,6 +143,35 @@ class Core
         return $this->getModule('asset-manager');
     }
 
+    /**
+     * returns logger module
+     * @return \DiplomaProject\Core\Modules\Logger
+     */
+    public function getLogger()
+    {
+        return $this->getModule('logger');
+    }
+
+    public static function error(string $message)
+    {
+        self::getCurrentApp()->getLogger()?->error($message);
+    }
+
+    public static function warning(string $message)
+    {
+        self::getCurrentApp()->getLogger()?->warning($message);
+    }
+
+    public static function info(string $message)
+    {
+        self::getCurrentApp()->getLogger()?->info($message);
+    }
+
+    public static function debug(string $message)
+    {
+        self::getCurrentApp()->getLogger()?->debug($message);
+    }
+
     private function processRequest()
     {
         /**
@@ -180,6 +222,8 @@ class Core
         try {
             $this->processRequest();
         } catch (\Throwable $e) {
+            Core::error($e->getMessage());
+            Core::error($e->getTraceAsString());
             echo $e->getMessage();
             var_dump($e);
         }

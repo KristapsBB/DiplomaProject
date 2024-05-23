@@ -2,6 +2,8 @@
 
 namespace DiplomaProject\Core\Modules;
 
+use DiplomaProject\Core\Core;
+
 class DataBase
 {
     private array $config = [
@@ -36,6 +38,8 @@ class DataBase
         if (!$result) {
             throw new \RuntimeException('Database connection error');
         }
+
+        Core::info(static::class . ' module is configured');
     }
 
     /**
