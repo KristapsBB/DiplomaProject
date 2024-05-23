@@ -67,6 +67,8 @@ class AssetManager
 
     public function registerScript(string $script_name, string $uri, string $version = '', bool $is_module = false)
     {
+        $params = [];
+
         if ($is_module) {
             $params = [
                 'is_module' => $is_module,

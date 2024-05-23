@@ -147,7 +147,9 @@ class TenderSearch
 
         foreach ($modes as $key => $mode) {
             if ($this->search_mode === $mode['value']) {
-                $modes[$key]['selected'] = 'true';
+                $modes[$key]['selected'] = true;
+            } else {
+                $modes[$key]['selected'] = false;
             }
         }
 

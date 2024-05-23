@@ -37,7 +37,7 @@ class AdminPanel extends Controller
     {
         $http = Core::getCurrentApp()->getHttp();
 
-        $search_query = trim($http->get('search-query'));
+        $search_query = trim($http->get('search-query') ?? '');
         $page = (int) ($http->get('page') ?? 1);
         $mode = $http->get('mode') ?? '';
 

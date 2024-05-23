@@ -139,7 +139,8 @@ class TendersAPI
                         $tenders_data[$key][$field_name] = $tender_field['eng'] ?? end($tender_field);
                         break;
                     case 'buyer-name':
-                        $tenders_data[$key][$field_name] = end(end($tender_field));
+                        $buyer_names = end($tender_field);
+                        $tenders_data[$key][$field_name] = end($buyer_names);
                         break;
                     case 'contract-nature':
                         $tenders_data[$key][$field_name] = end($tender_field);

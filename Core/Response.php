@@ -21,8 +21,8 @@ class Response
         foreach ($this->headers as $header) {
             header(
                 $header['header'] ?? $header[0],
-                $header['replace'] ?? $header[1],
-                $header['response_code'] ?? $header[2]
+                $header['replace'] ?? $header[1] ?? true,
+                $header['response_code'] ?? $header[2] ?? 0
             );
         }
 

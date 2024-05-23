@@ -27,6 +27,9 @@ class Core
         return self::$current_app;
     }
 
+    /**
+     * returns path to application root (with trailing slash)
+     */
     public function getAppRoot(): string
     {
         return $this->root;
@@ -148,6 +151,7 @@ class Core
          * running the selected controller method
          */
         $controller = new $controller_class();
+        $response = null;
 
         if (method_exists($controller, 'before')) {
             /**

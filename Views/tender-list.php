@@ -11,7 +11,7 @@ use DiplomaProject\Models\TenderList;
 $tender_list = $this->params['tender_list'];
 $css_class = $this->params['block-style-class'];
 
-if ($this->params['without-buttons']) {
+if ($this->params['without-buttons'] ?? false) {
     $css_class .= ' ' . 'tender-list_without-buttons';
 }
 ?>
