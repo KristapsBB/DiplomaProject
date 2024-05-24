@@ -21,7 +21,7 @@ class Http extends Module
         $url = $uri;
 
         if (!empty($get_params)) {
-            $url .= \http_build_query($get_params, 'var_');
+            $url .= '?' . \http_build_query($get_params, 'var_');
         }
 
         if (parse_url($url, PHP_URL_HOST)) {
