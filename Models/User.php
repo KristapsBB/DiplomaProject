@@ -51,6 +51,11 @@ class User extends DbModel implements UserInterface, DataBaseModelInterface
         return (self::ACCESS_LEVEL_ADMIN === $this->access_level);
     }
 
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
     public function setToken(string $token)
     {
         $this->token = $token;
@@ -113,5 +118,22 @@ class User extends DbModel implements UserInterface, DataBaseModelInterface
     public function getErrors(): array
     {
         return $this->errors;
+    }
+
+    /**
+     * @return Tender[]
+     */
+    public function getTenders(array $condition = []): array
+    {
+        $condition[] = ['user_id', '=', $this->getId()];
+
+        $tenders_to_user = TenderToUser::find($condition);
+        $pub_numbers = array_column($tenders_to_user, 'publication_number');
+
+        if (empty($pub_numbers)) {
+            return [];
+        }
+
+        return Tender::find([['publication_number', 'IN', $pub_numbers]]);
     }
 }

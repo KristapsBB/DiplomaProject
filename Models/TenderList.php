@@ -10,8 +10,10 @@ class TenderList
     /**
      * @param Tender[] $tenders
      */
-    public function __construct(private array $tenders = [])
-    {
+    public function __construct(
+        private array $tenders = [],
+        private int $user_id = 0
+    ) {
         $this->total_tenders_count = count($tenders);
     }
 
@@ -36,13 +38,14 @@ class TenderList
     public function getNumbersOfExisting(bool $reset_cache = false): array
     {
         if (null === $this->numbers_of_existing || $reset_cache) {
-            $pub_nums = [];
+            $pub_nums = array_column($this->tenders, 'publication_number');
 
-            foreach ($this->tenders as $tender) {
-                $pub_nums[] = $tender->publication_number;
-            }
+            $cond = [
+                ['publication_number', 'IN', $pub_nums],
+                ['user_id', '=', $this->user_id],
+            ];
 
-            $numbers_of_existing = Tender::getFieldsOfExisting('publication_number', $pub_nums);
+            $numbers_of_existing = TenderToUser::find($cond);
             $this->numbers_of_existing = array_column($numbers_of_existing, 'publication_number');
         }
 
@@ -90,6 +93,11 @@ class TenderList
             } else {
                 $saving_status[$pub_num] = 'already-exists';
             }
+
+            $tender_to_user = new TenderToUser();
+            $tender_to_user->publication_number = $pub_num;
+            $tender_to_user->user_id = $this->user_id;
+            $tender_to_user->save();
         }
 
         return $saving_status;

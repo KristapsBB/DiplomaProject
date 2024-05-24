@@ -5,6 +5,7 @@ namespace DiplomaProject\Core;
 use DiplomaProject\Core\Interfaces\DataBaseModelInterface;
 use DiplomaProject\Core\Interfaces\UserInterface;
 use DiplomaProject\Core\Response;
+use DiplomaProject\Models\User;
 
 class Controller
 {
@@ -89,5 +90,16 @@ class Controller
         $user = $authentication->getCurrentUser();
 
         return ($user->validateToken());
+    }
+
+
+    /**
+     * @return User
+     */
+    public function getCurrentUser()
+    {
+        return Core::getCurrentApp()
+            ->getAuthentication()
+            ->getCurrentUser();
     }
 }

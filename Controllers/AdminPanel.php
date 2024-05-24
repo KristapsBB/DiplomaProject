@@ -10,6 +10,7 @@ use DiplomaProject\Models\Tender;
 use DiplomaProject\Models\TenderExporter;
 use DiplomaProject\Models\TenderList;
 use DiplomaProject\Models\TenderSearch;
+use DiplomaProject\Models\TenderToUser;
 
 class AdminPanel extends Controller
 {
@@ -55,7 +56,7 @@ class AdminPanel extends Controller
 
         return $this->showView('tender-import', [
             'search' => $tender_search,
-            'tender_list' => $tender_search->getTenderList(),
+            'tender_list' => $tender_search->getTenderList($this->getCurrentUser()->getId()),
             'pagination' => $pagination,
         ]);
     }
@@ -90,7 +91,7 @@ class AdminPanel extends Controller
         $tender_search = new TenderSearch($mode);
         $tender_search->fetchTendersFromApi($search_query, $page);
 
-        $tender_list = $tender_search->getTenderList();
+        $tender_list = $tender_search->getTenderList($this->getCurrentUser()->getId());
 
         $tenders = [];
         foreach ($tender_list->getTenders() as $key => $tender) {
@@ -130,7 +131,9 @@ class AdminPanel extends Controller
             }
         }
 
-        $saving_status = $tender_search->getTenderList()->saveList();
+        $saving_status = $tender_search->getTenderList(
+            $this->getCurrentUser()->getId()
+        )->saveList();
 
         if ('json' === $http->post('format')) {
             return $this->sendJson([
@@ -143,7 +146,8 @@ class AdminPanel extends Controller
 
     public function savedTenders()
     {
-        $saved_tenders = new TenderList(Tender::findAll());
+        $user = $this->getCurrentUser();
+        $saved_tenders = new TenderList($user->getTenders(), $user->getId());
 
         return $this->showView('saved-tenders', [
             'saved_tenders' => $saved_tenders,
@@ -161,9 +165,16 @@ class AdminPanel extends Controller
             ], [], 400);
         }
 
+        $user_id = $this->getCurrentUser()->getId();
+
         $deleting_status = [];
         foreach ($pub_numbers as $pub_number) {
-            if (Tender::deleteOneBy('publication_number', $pub_number)) {
+            $res = TenderToUser::deleteBy([
+                ['publication_number', '=', $pub_number],
+                ['user_id', '=', $user_id],
+            ]);
+
+            if ($res) {
                 $deleting_status[] = 'deleted';
             } else {
                 $deleting_status[] = 'failed';
@@ -190,14 +201,12 @@ class AdminPanel extends Controller
             ], [], 400);
         }
 
-        $tenders = [];
-        if (true === $get_all_tenders) {
-            $tenders = Tender::findAll('publication_number');
-        } else {
-            foreach ($pub_numbers as $pub_number) {
-                $tenders[] = Tender::findOneBy('publication_number', $pub_number);
-            }
+        if (true !== $get_all_tenders && !empty($pub_numbers)) {
+            $condition = [['publication_number', 'IN', $pub_numbers]];
         }
+
+        $user = $this->getCurrentUser();
+        $tenders = $user->getTenders($condition ?? []);
 
         $root = Core::getCurrentApp()->getAppRoot();
         $fullpath = $root . 'tender-table.xlsx';

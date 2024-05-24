@@ -10,6 +10,7 @@ interface UserInterface
 
     public function isAdmin(): bool;
 
+    public function getId(): int;
     public function getLogin(): string;
     public function setPassword(string $password);
     public function getPassword(): string;
