@@ -14,7 +14,7 @@ class Authentication extends Controller
         $auth = Core::getCurrentApp()->getAuthentication();
 
         $curr_user = $auth->getCurrentUser();
-        if ($curr_user->validateToken()) {
+        if ($curr_user->validateToken('auth')) {
             return $this->toUrl($page_after_logging_in);
         }
 

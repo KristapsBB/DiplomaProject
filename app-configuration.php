@@ -52,6 +52,7 @@ return [
                     'authentication' => \DiplomaProject\Controllers\Authentication::class,
                     'login'          => \DiplomaProject\Controllers\Authentication::class,
                     'admin-panel'    => \DiplomaProject\Controllers\AdminPanel::class,
+                    'users'          => \DiplomaProject\Controllers\Users::class,
                 ],
             ],
         ],

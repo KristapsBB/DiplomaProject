@@ -17,6 +17,7 @@ class Controller
     ): Response {
         $viewer = Core::getCurrentApp()->getViewer();
         $page_params['is_user_logged_in'] = $this->isCurrUserLoggedIn();
+        $page_params['is_admin'] = $this->isAdmin();
 
         ob_start();
         $viewer->showLayout($view_name, $params, $page_params, $http_code);
@@ -81,7 +82,7 @@ class Controller
             $user = $authentication->getCurrentUser();
         }
 
-        return ($user->validateToken() && $user->isAdmin());
+        return ($user->validateToken('auth') && $user->isAdmin());
     }
 
     public function isCurrUserLoggedIn(): bool
@@ -89,7 +90,7 @@ class Controller
         $authentication = Core::getCurrentApp()->getAuthentication();
         $user = $authentication->getCurrentUser();
 
-        return ($user->validateToken());
+        return ($user->validateToken('auth'));
     }
 
 

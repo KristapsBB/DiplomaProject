@@ -4,10 +4,8 @@ namespace DiplomaProject\Models;
 
 use DiplomaProject\Core\Core;
 
-class LoginForm
+class LoginForm extends ValidationForm
 {
-    private array $errors = [];
-
     public function __construct(
         public string $login,
         public string $password
@@ -16,7 +14,7 @@ class LoginForm
 
     public function validateForm(): bool
     {
-        $this->errors = [];
+        $this->resetErrors();
 
         if (empty($this->login)) {
             $this->addError("field 'login' is required");
@@ -35,27 +33,13 @@ class LoginForm
             $this->addError("user '{$this->login}' not found");
         } elseif (!$user->validatePassword($this->password)) {
             $this->addError('invalid login or password');
+            return false;
         }
 
-        return (count($this->errors) === 0);
-    }
-
-    private function addError(string $message)
-    {
-        $this->errors[] = $message;
-    }
-
-    public function getErrors(): array
-    {
-        return $this->errors;
-    }
-
-    public function getLastError(): ?string
-    {
-        if (count($this->errors) === 0) {
-            return null;
+        if (!$user->isEnabled()) {
+            $this->addError('your account is not activated or disabled');
         }
 
-        return end($this->errors);
+        return $this->hasErrors();
     }
 }

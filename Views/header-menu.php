@@ -15,6 +15,11 @@
             Import tenders
         </a>
     <?php endif; ?>
+    <?php if ($this->getPageParam('is_admin')) : ?>
+        <a href="/users" class="header-menu__link">
+            Users
+        </a>
+    <?php endif; ?>
     </nav>
     <?php $this->showView('login-or-logout-button', ['block-style-class' => 'login-or-logout-button']) ?>
 </div>

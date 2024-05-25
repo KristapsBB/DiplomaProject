@@ -20,9 +20,7 @@
 	background: #3c3c3c;
 }
 
-.index-block,
-.login-block,
-.error-block {
+[class$="-block"] {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -37,13 +35,13 @@
 	box-shadow: 1px 1px 20px -3px #404040;
 }
 
-.login-form {
+[class$="-form"] {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 }
 
-.login-form__error {
+[class$="-form__error"] {
 	padding: 15px 0 30px;
 	color: #cf1818;
 	min-height: 1em;
@@ -51,22 +49,22 @@
 	text-align: center;
 }
 
-.login-form__input-wrapper {
+[class$="-form__input-wrapper"] {
 	padding-top: 10px;
 }
 
-.login-form__field-label {
+[class$="-form__field-label"] {
 	display: inline-block;
 	width: 4em;
 	font-size: 16px;
 	margin-right: 15px;
 }
 
-.login-form__field-input {
+[class$="-form__field-input"] {
 	padding: 5px 10px;
 }
 
-.login-form__submit {
+[class$="-form__submit"] {
 	padding: 10px 20px;
 	font-size: 16px;
 	background-color: #3ab93a;
@@ -77,18 +75,17 @@
 	cursor: pointer;
 }
 
-.login-form__submit:active {
+[class$="-form__submit:active"] {
 	box-shadow: inset 0 0 15px 0px white;
 	color: white;
 }
 
-.login-form__submit:hover {
+[class$="-form__submit:hover"] {
 	/* box-shadow: inset 0 0 10px 0px white; */
 	background-color: #40cf40;
 }
 
-.index-block__message,
-.error-block__message {
+[class$="-block__message"] {
 	font-size: 30px;
 	margin-top: 50px;
 	margin-bottom: 30px;
@@ -416,4 +413,86 @@ tender-list__items {
 
 .tender-list-item__is-saved {
 	display: none;
+}
+
+.users-block {
+	max-width: 1100px;
+	width: 100%;
+}
+
+.user-list {
+	/* width: 100%; */
+}
+
+.user-list__header,
+.user-list__item {
+	display: grid;
+	grid-template-columns: calc(3em + 30px) 1fr 1fr 110px 70px 70px;
+	justify-items: center;
+	border-bottom: 1px solid black;
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+}
+
+.user-list__header > *,
+.user-list__item > * {
+	justify-self: normal;
+	padding: 15px;
+}
+
+.users-block__message {
+	border: 1px solid black;
+	box-sizing: border-box;
+	padding: 15px;
+	font-size: 20px;
+	font-weight: bold;
+	margin: 20px 0 30px;
+}
+
+.users-block__message.complete {
+	color: white;
+	background-color: #72cf72;
+}
+
+.users-block__message.error {
+	background-color: orangered;
+}
+
+.edit-user-form {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+}
+
+.edit-user-form__submit {
+	text-wrap: nowrap;
+	padding: 5px;
+	margin-top: 10px;
+	width: 11em;
+}
+
+.new-user-form__field-label,
+.edit-user-form__field-label {
+	text-wrap: nowrap;
+	width: 100px;
+}
+
+.new-user-form__field-input,
+.edit-user-form__field-input {
+	width: 400px;
+}
+
+.user-list__header {
+	font-weight: bold;
+}
+
+.user_is-disabled {
+	color: grey;
+}
+.edit-user-form__submit-wrapper > [formaction="/users/disable"] {
+	background-color: rgb(204, 0, 0);
+}
+
+.new-user-form__submit-wrapper button {
+	width: 300px
 }

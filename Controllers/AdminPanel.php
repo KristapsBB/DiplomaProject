@@ -21,7 +21,7 @@ class AdminPanel extends Controller
          */
         $onlyPost = ['searchAndSave', 'deleteTenders', 'downloadTenderTable'];
 
-        if (!$this->isAdmin()) {
+        if (!$this->getCurrentUser()->can('find_tenders')) {
             return $this->showView('error', ['error' => 'Access denied'], [], 403);
         }
 

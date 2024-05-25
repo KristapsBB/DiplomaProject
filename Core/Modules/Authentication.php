@@ -52,13 +52,13 @@ class Authentication extends Module
      */
     public function getCurrentUser()
     {
-        $token = Core::getCurrentApp()->getHttp()->getCookie('token');
+        $token = Core::getCurrentApp()->getHttp()->getCookie('auth_token');
 
         if (null === $token) {
             return $this->user_class::getGuest();
         }
 
-        $user = $this->user_class::getUserByToken($token);
+        $user = $this->user_class::getUserByToken('auth', $token);
 
         if (empty($user)) {
             return $this->user_class::getGuest();
@@ -80,23 +80,23 @@ class Authentication extends Module
      */
     public function getUserByToken(string $token)
     {
-        return $this->user_class::getUserByToken($token);
+        return $this->user_class::getUserByToken('auth', $token);
     }
 
     public function authenticate(UserInterface & DataBaseModelInterface $user)
     {
         $new_token = $user->generateToken($this->token_lifetime);
-        $user->setToken($new_token);
+        $user->setToken('auth', $new_token);
         $user->save();
 
-        Core::getCurrentApp()->getHttp()->setCookie('token', $new_token, time() + $this->token_lifetime * 60);
+        Core::getCurrentApp()->getHttp()->setCookie('auth_token', $new_token, time() + $this->token_lifetime * 60);
     }
 
     public function logout(UserInterface & DataBaseModelInterface $user)
     {
-        $user->setToken('');
+        $user->setToken('auth', null);
         $user->save();
 
-        Core::getCurrentApp()->getHttp()->setCookie('token', '');
+        Core::getCurrentApp()->getHttp()->setCookie('auth_token', '');
     }
 }
