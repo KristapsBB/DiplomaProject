@@ -31,6 +31,7 @@ class LoginForm extends ValidationForm
 
         if (null === $user) {
             $this->addError("user '{$this->login}' not found");
+            return false;
         } elseif (!$user->validatePassword($this->password)) {
             $this->addError('invalid login or password');
             return false;
