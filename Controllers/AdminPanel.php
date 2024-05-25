@@ -4,6 +4,7 @@ namespace DiplomaProject\Controllers;
 
 use DiplomaProject\Core\Controller;
 use DiplomaProject\Core\Core;
+use DiplomaProject\Core\Libs\FileHelper;
 use DiplomaProject\Enums\TenderSearchMode;
 use DiplomaProject\Models\Pagination;
 use DiplomaProject\Models\Tender;
@@ -209,7 +210,10 @@ class AdminPanel extends Controller
         $tenders = $user->getTenders($condition ?? []);
 
         $root = Core::getCurrentApp()->getAppRoot();
-        $fullpath = $root . 'tender-table.xlsx';
+        $files_dir = "{$root}runtime/generated-files";
+        $fullpath = "$files_dir/tender-table-{$user->login}.xlsx";
+
+        FileHelper::initDir($files_dir);
 
         if (!(new TenderExporter())->buildXlsxFile($fullpath, $tenders)) {
             if (!is_array($pub_numbers)) {
