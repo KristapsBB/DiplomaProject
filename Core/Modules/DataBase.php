@@ -53,6 +53,8 @@ class DataBase
             $this->connection = new \mysqli($hostname, $username, $password, $database);
             $this->connection->set_charset('utf8mb4');
         } catch (\Throwable $th) {
+            Core::error($th->getMessage());
+            Core::error($th->getTraceAsString());
             return false;
         }
 
