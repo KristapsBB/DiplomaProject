@@ -30,6 +30,7 @@ $this->setBodyClass('page page-login');
             </label>
             <input type="password" name="login-form[password]" id="password" class="login-form__field-input">
         </div>
+        <a href="/registration">registration</a>
         <div class=" login-form__submit-wrapper">
             <button type="submit" class="login-form__submit">login</button>
         </div>
