@@ -63,6 +63,7 @@ class User extends DbModel implements UserInterface, DataBaseModelInterface
     public static function getGuest(): self
     {
         $guest = new self();
+        $guest->login = 'guest';
         $guest->access_level = self::ACCESS_LEVEL_GUEST;
         return $guest;
     }

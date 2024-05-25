@@ -18,6 +18,7 @@ class Controller
         $viewer = Core::getCurrentApp()->getViewer();
         $page_params['is_user_logged_in'] = $this->isCurrUserLoggedIn();
         $page_params['is_admin'] = $this->isAdmin();
+        $page_params['current_user_login'] = $this->getCurrentUser()->getLogin();
 
         ob_start();
         $viewer->showLayout($view_name, $params, $page_params, $http_code);
