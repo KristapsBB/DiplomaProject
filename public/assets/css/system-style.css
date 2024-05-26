@@ -442,17 +442,26 @@ tender-list__items {
 .user-list__header,
 .user-list__item {
 	display: grid;
-	grid-template-columns: calc(3em + 30px) 1fr 1fr 110px 70px 70px;
+	grid-template-columns: calc(3em + 30px) 1fr 1fr 110px 70px 90px;
 	justify-items: center;
 	border-bottom: 1px solid black;
-	padding-bottom: 10px;
-	margin-bottom: 10px;
+	padding: 15px 10px 10px;
 }
 
 .user-list__header > *,
 .user-list__item > * {
 	justify-self: normal;
 	padding: 15px;
+}
+
+.user-list__header {
+	font-weight: bold;
+	background-color: rgb(245, 245, 245);
+	padding: 10px;
+}
+
+.user-list__item:nth-child(2n+2) {
+	background-color: antiquewhite;
 }
 
 .users-block__message {
@@ -495,10 +504,6 @@ tender-list__items {
 .new-user-form__field-input,
 .edit-user-form__field-input {
 	width: 400px;
-}
-
-.user-list__header {
-	font-weight: bold;
 }
 
 .user_is-disabled {
