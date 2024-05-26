@@ -12,6 +12,7 @@ use DiplomaProject\Models\TenderExporter;
 use DiplomaProject\Models\TenderList;
 use DiplomaProject\Models\TenderSearch;
 use DiplomaProject\Models\TenderToUser;
+use DiplomaProject\Models\User;
 
 class AdminPanel extends Controller
 {
@@ -147,11 +148,22 @@ class AdminPanel extends Controller
 
     public function savedTenders()
     {
-        $user = $this->getCurrentUser();
+        $user = $this->getSelectedUser('user_id');
+
+        if ($user->getId() === $this->getCurrentUser()->getId()) {
+            $title = 'your list of tenders';
+            $hide_edit_buttons = false;
+        } else {
+            $title = 'list of tenders of user "' . $user->getLogin() . '"';
+            $hide_edit_buttons = true;
+        }
+
         $saved_tenders = new TenderList($user->getTenders(), $user->getId());
 
         return $this->showView('saved-tenders', [
+            'title' => $title,
             'saved_tenders' => $saved_tenders,
+            'hide_edit_buttons' => $hide_edit_buttons,
         ]);
     }
 
@@ -206,7 +218,7 @@ class AdminPanel extends Controller
             $condition = [['publication_number', 'IN', $pub_numbers]];
         }
 
-        $user = $this->getCurrentUser();
+        $user = $this->getSelectedUser('user_id');
         $tenders = $user->getTenders($condition ?? []);
 
         $root = Core::getCurrentApp()->getAppRoot();
@@ -224,5 +236,21 @@ class AdminPanel extends Controller
         }
 
         return $this->sendFile($fullpath);
+    }
+
+    private function getSelectedUser(string $var_name): User
+    {
+        $http = Core::getCurrentApp()->getHttp();
+
+        if ($this->isAdmin() && !empty($http->get($var_name))) {
+            $user_id = (int) $http->get($var_name);
+            $user = User::findOneBy('id', $user_id);
+        }
+
+        if (empty($user)) {
+            $user = $this->getCurrentUser();
+        }
+
+        return $user;
     }
 }

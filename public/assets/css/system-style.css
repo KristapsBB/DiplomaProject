@@ -511,3 +511,9 @@ tender-list__items {
 .new-user-form__submit-wrapper button {
 	width: 300px
 }
+
+.users-block__note {
+	width: 100%;
+	padding: 15px 0px 25px;
+	color: dimgrey;
+}

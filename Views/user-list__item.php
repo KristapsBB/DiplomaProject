@@ -20,7 +20,9 @@ $user = $this->params['user'];
         <?php echo $user->id; ?>
     </div>
     <div class="user-list__username">
-        <?php HtmlHelper::printEsc($user->login); ?>
+        <a href="/admin-panel/saved-tenders?user_id=<?php echo $user->id; ?>">
+            <?php HtmlHelper::printEsc($user->login); ?>
+        </a>
     </div>
     <div class="user-list__email">
         <?php HtmlHelper::printEsc($user->email); ?>

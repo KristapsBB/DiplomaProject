@@ -30,6 +30,9 @@ $status    = $this->params['status'];
     <?php endif; ?>
 
     <div class="user-list">
+        <div class="users-block__note">
+            To view the list of saved tenders, click on the user login
+        </div>
         <div class="user-list__header">
             <div class="user-list__id">Id</div>
             <div class="user-list__username">Login</div>
