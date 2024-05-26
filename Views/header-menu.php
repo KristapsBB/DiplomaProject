@@ -8,10 +8,10 @@
 <div class="page__header-menu">
     <nav class="header-menu">
     <?php if ($this->getPageParam('is_user_logged_in')) : ?>
-        <a href="/admin-panel/saved-tenders" class="header-menu__link">
+        <a href="/tenders/saved-tenders" class="header-menu__link">
             Saved tenders
         </a>
-        <a href="/admin-panel/import-tenders" class="header-menu__link">
+        <a href="/tenders/import-tenders" class="header-menu__link">
             Import tenders
         </a>
     <?php endif; ?>

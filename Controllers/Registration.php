@@ -17,7 +17,7 @@ class Registration extends Controller
     public function registrationPage()
     {
         if ($this->isCurrUserLoggedIn()) {
-            return $this->toUrl('/admin-panel/import-tenders');
+            return $this->toUrl('/tenders/import-tenders');
         }
 
         $http = Core::getCurrentApp()->getHttp();

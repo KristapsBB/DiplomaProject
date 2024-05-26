@@ -14,7 +14,7 @@ use DiplomaProject\Models\TenderSearch;
 use DiplomaProject\Models\TenderToUser;
 use DiplomaProject\Models\User;
 
-class AdminPanel extends Controller
+class Tenders extends Controller
 {
     public function before(string $method_name)
     {

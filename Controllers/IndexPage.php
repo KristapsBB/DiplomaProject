@@ -12,6 +12,6 @@ class IndexPage extends Controller
             return $this->showView('index-page');
         }
 
-        return $this->toUrl('/admin-panel/import-tenders');
+        return $this->toUrl('/tenders/import-tenders');
     }
 }

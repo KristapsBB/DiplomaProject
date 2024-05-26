@@ -25,16 +25,16 @@ $hide_edit_buttons = $this->params['hide_edit_buttons'] ?? true;
 <div class="saved-tenders__forms">
     <form class="tenders-form" method="post" id="download-all-tenders-form">
         <input type="hidden" name="get-all-tenders" value="true">
-        <button type="submit" class="tenders-form__button" formaction="/admin-panel/download-tender-table">
+        <button type="submit" class="tenders-form__button" formaction="/tenders/download-tender-table">
             download all tenders
         </button>
     </form>
     <form class="tenders-form" method="post" id="tenders-form">
-        <button type="submit" class="tenders-form__button" formaction="/admin-panel/download-tender-table">
+        <button type="submit" class="tenders-form__button" formaction="/tenders/download-tender-table">
             download selected tenders
         </button>
         <?php if (!$hide_edit_buttons) : ?>
-            <button type="submit" class="tenders-form__button detele-button" formaction="/admin-panel/delete-tenders">
+            <button type="submit" class="tenders-form__button detele-button" formaction="/tenders/delete-tenders">
                 delete selected tenders
             </button>
         <?php endif ?>

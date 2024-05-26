@@ -74,8 +74,8 @@ class TendersLoader {
 		}
 
 		let tender_templater = new TenderTemplater(
-			'/admin-panel/get-tender-template',
-			'/admin-panel/get-tenders-data'
+			'/tenders/get-tender-template',
+			'/tenders/get-tenders-data'
 		);
 		this.pagination = new Pagination(
 			`.${this.pagination_css_class}`,

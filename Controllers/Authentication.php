@@ -10,7 +10,7 @@ class Authentication extends Controller
 {
     public function login()
     {
-        $page_after_logging_in = '/admin-panel/import-tenders';
+        $page_after_logging_in = '/tenders/import-tenders';
         $auth = Core::getCurrentApp()->getAuthentication();
 
         $curr_user = $auth->getCurrentUser();

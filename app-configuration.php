@@ -51,7 +51,7 @@ return [
                 'controller_map' => [
                     'authentication' => \DiplomaProject\Controllers\Authentication::class,
                     'login'          => \DiplomaProject\Controllers\Authentication::class,
-                    'admin-panel'    => \DiplomaProject\Controllers\AdminPanel::class,
+                    'tenders'        => \DiplomaProject\Controllers\Tenders::class,
                     'users'          => \DiplomaProject\Controllers\Users::class,
                     'registration'   => \DiplomaProject\Controllers\Registration::class,
                 ],
