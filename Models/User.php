@@ -282,6 +282,10 @@ class User extends DbModel implements UserInterface, DataBaseModelInterface
             return false;
         }
 
+        if (self::STATUS_NOT_ACTIVATED !== $user->status) {
+            return false;
+        }
+
         if (!$user->validateRescueToken()) {
             return false;
         }
