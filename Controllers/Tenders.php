@@ -148,6 +148,9 @@ class Tenders extends Controller
 
     public function savedTenders()
     {
+        $http = Core::getCurrentApp()->getHttp();
+        $error = $http->get('error') ?? '';
+
         $user = $this->getSelectedUser('user_id');
 
         if ($user->getId() === $this->getCurrentUser()->getId()) {
@@ -164,6 +167,8 @@ class Tenders extends Controller
             'title' => $title,
             'saved_tenders' => $saved_tenders,
             'hide_edit_buttons' => $hide_edit_buttons,
+            'user_id' => $user->getId(),
+            'error' => $error,
         ]);
     }
 
@@ -179,6 +184,13 @@ class Tenders extends Controller
         }
 
         $user_id = $this->getCurrentUser()->getId();
+
+        if (empty($pub_numbers)) {
+            return $this->toUrl('/tenders/saved-tenders', [
+                'user_id' => $user_id,
+                'error' => 'nothing is selected',
+            ]);
+        }
 
         $deleting_status = [];
         foreach ($pub_numbers as $pub_number) {
@@ -198,7 +210,9 @@ class Tenders extends Controller
                 'deleting_status' => $deleting_status,
             ]);
         } else {
-            return $this->toUrl($http->getReferer());
+            return $this->toUrl('/tenders/saved-tenders', [
+                'user_id' => $user_id,
+            ]);
         }
     }
 
@@ -214,11 +228,19 @@ class Tenders extends Controller
             ], [], 400);
         }
 
-        if (true !== $get_all_tenders && !empty($pub_numbers)) {
+        $user = $this->getSelectedUser('user_id', 'post');
+
+        if (true !== $get_all_tenders && empty($pub_numbers)) {
+            return $this->toUrl('/tenders/saved-tenders', [
+                'user_id' => $user->getId(),
+                'error' => 'nothing is selected',
+            ]);
+        }
+
+        if (true !== $get_all_tenders) {
             $condition = [['publication_number', 'IN', $pub_numbers]];
         }
 
-        $user = $this->getSelectedUser('user_id');
         $tenders = $user->getTenders($condition ?? []);
 
         $root = Core::getCurrentApp()->getAppRoot();
@@ -238,12 +260,18 @@ class Tenders extends Controller
         return $this->sendFile($fullpath);
     }
 
-    private function getSelectedUser(string $var_name): User
+    private function getSelectedUser(string $var_name, string $method = 'get'): User
     {
         $http = Core::getCurrentApp()->getHttp();
 
-        if ($this->isAdmin() && !empty($http->get($var_name))) {
-            $user_id = (int) $http->get($var_name);
+        if ('post' === strtolower($method)) {
+            $user_id = $http->post($var_name);
+        } else {
+            $user_id = $http->get($var_name);
+        }
+
+        if ($this->isAdmin() && !empty($user_id)) {
+            $user_id = (int) $user_id;
             $user = User::findOneBy('id', $user_id);
         }
 

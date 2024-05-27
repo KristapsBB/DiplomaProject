@@ -12,6 +12,7 @@ $this->setBodyClass('page page-saved-tenders');
  */
 $saved_tenders = $this->params['saved_tenders'];
 $title = $this->params['title'];
+$error = $this->params['error'];
 
 /**
  * @var bool $hide_edit_buttons
@@ -22,14 +23,25 @@ $hide_edit_buttons = $this->params['hide_edit_buttons'] ?? true;
 <h1 class="saved-tenders__title">
     <?php echo $title ?>
 </h1>
+<?php if (!empty($error)) : ?>
+    <div class="users-block__message error">
+        <?php echo $error ?>
+    </div>
+<?php endif ?>
 <div class="saved-tenders__forms">
     <form class="tenders-form" method="post" id="download-all-tenders-form">
+        <?php if ($this->getPageParam('is_admin')) : ?>
+            <input type="hidden" name="user_id" value="<?php echo $this->params['user_id'] ?>">
+        <?php endif ?>
         <input type="hidden" name="get-all-tenders" value="true">
         <button type="submit" class="tenders-form__button" formaction="/tenders/download-tender-table">
             download all tenders
         </button>
     </form>
     <form class="tenders-form" method="post" id="tenders-form">
+        <?php if ($this->getPageParam('is_admin')) : ?>
+            <input type="hidden" name="user_id" value="<?php echo $this->params['user_id'] ?>">
+        <?php endif ?>
         <button type="submit" class="tenders-form__button" formaction="/tenders/download-tender-table">
             download selected tenders
         </button>

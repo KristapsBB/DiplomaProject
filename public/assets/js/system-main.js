@@ -1,5 +1,25 @@
 'use strict';
 
+/**
+ * hiding errors when changes are made on the saved tenders page
+ */
+document.addEventListener('DOMContentLoaded', () => {
+	let page_saved_tenders = document.querySelector('.page-saved-tenders');
+
+	if (null !== page_saved_tenders) {
+		page_saved_tenders.querySelector('.tender-list.saved-tenders').addEventListener('change', (e) => {
+			let error_elem = page_saved_tenders.querySelector('.users-block__message.error');
+
+			if (null !== error_elem) {
+				error_elem.remove();
+			}
+		});
+	}
+});
+
+/**
+ * pagination on the tender search page
+ */
 document.addEventListener('DOMContentLoaded', () => {
 	let tenders_toader = new TendersLoader(
 		'searched-tenders',
