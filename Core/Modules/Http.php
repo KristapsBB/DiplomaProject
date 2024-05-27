@@ -28,7 +28,9 @@ class Http extends Module
             return "{$url}";
         }
 
-        return "http://{$this->base_url}$url";
+        $protocol = ($this->isHttps()) ? 'https' : 'http';
+
+        return "{$protocol}://{$this->base_url}$url";
     }
 
     public function redirect(string $url, int $code = 303)
@@ -81,5 +83,10 @@ class Http extends Module
     public function getReferer(): string
     {
         return $_SERVER['HTTP_REFERER'] ?? '';
+    }
+
+    public function isHttps(): bool
+    {
+        return !empty($_SERVER['HTTPS']);
     }
 }
