@@ -30,8 +30,8 @@ class Viewer extends Module
 
         $asset_manager->registerStyle('system-normalize', 'css/normalize.css');
         $asset_manager->registerStyle('system-reset', 'css/my-reset.css');
-        $asset_manager->registerStyle('system-stylecss', 'css/system-style.css');
-        $asset_manager->registerScript('system-mainjs', 'js/system-main.js');
+        $asset_manager->registerStyle('system-stylecss', 'css/system-style.css', '1.1.0');
+        $asset_manager->registerScript('system-mainjs', 'js/system-main.js', '1.1.0');
 
         $asset_manager->enqueueStyles([
             'system-normalize',

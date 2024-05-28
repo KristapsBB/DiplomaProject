@@ -9,6 +9,9 @@ return [
                 'username' => 'diploma_project_admin',
                 'password' => '123',
                 'database' => 'diploma_project_db',
+                // 'username' => 'cronoaqx_tender',
+                // 'password' => 'tenderqazxswedc1!',
+                // 'database' => 'cronoaqx_tender',
             ]
         ],
         'http' => [
@@ -61,7 +64,7 @@ return [
             'class'  => DiplomaProject\Core\Modules\Logger::class,
             'params' => [
                 'logsdir' => 'runtime/logs',
-                'level'   => 20,
+                'level'   => 0,
             ]
         ]
     ],
@@ -73,13 +76,16 @@ return [
                 'username' => 'diploma_project_admin',
                 'password' => '123',
                 'database' => 'diploma_project_db',
+                // 'username' => 'cronoaqx_tender',
+                // 'password' => 'tenderqazxswedc1!',
+                // 'database' => 'cronoaqx_tender',
             ]
         ],
         'logger' => [
             'class'  => DiplomaProject\Core\Modules\Logger::class,
             'params' => [
                 'logsdir' => 'runtime/logs',
-                'level'   => 20,
+                'level'   => 0,
             ]
         ]
     ]
