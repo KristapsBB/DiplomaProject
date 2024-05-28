@@ -19,6 +19,10 @@ interface UserInterface
     public function getToken(string $token_name): string;
     public function isEnabled(): bool;
 
+    public function isUnblocked(int $attempts_before_blocking): bool;
+    public function unblock();
+    public function tryBlock(int $attempts_before_blocking, int $minutes);
+
     public function generatePasswordHash(string $password): string;
     public function validatePassword(string $password): bool;
     public function generateToken(int $lifetime = 0): string;

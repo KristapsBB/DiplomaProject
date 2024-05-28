@@ -11,6 +11,8 @@ class Authentication extends Controller
     public function login()
     {
         $page_after_logging_in = '/tenders/import-tenders';
+        $attempts_before_blocking = 3;
+
         $auth = Core::getCurrentApp()->getAuthentication();
 
         $curr_user = $auth->getCurrentUser();
@@ -28,12 +30,21 @@ class Authentication extends Controller
                 $form_data['password']
             );
 
-            if ($login_form->validateForm()) {
-                $auth->authenticate(
-                    $auth->getUserByLogin($login_form->login)
-                );
+            $user = $auth->getUserByLogin($login_form->login);
+
+            if (!empty($user) && !$user->isUnblocked($attempts_before_blocking)) {
+                return $this->showView('login', [
+                    'error' => 'the maximum number of attempts has been exceeded, try again later',
+                ]);
+            }
+
+            if ($login_form->validateForm($attempts_before_blocking)) {
+                $user->unblock();
+                $auth->authenticate($user);
 
                 return $this->toUrl($page_after_logging_in);
+            } else {
+                $user?->tryBlock($attempts_before_blocking, 15);
             }
 
             $error = $login_form->getLastError();

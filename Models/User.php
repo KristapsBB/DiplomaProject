@@ -18,7 +18,9 @@ class User extends DbModel implements UserInterface, DataBaseModelInterface
         'auth_token',
         'access_level',
         'rescue_token',
-        'status'
+        'status',
+        'number_of_failed_login',
+        'datetime_of_unblocking',
     ];
 
     private array $errors = [];
@@ -49,6 +51,8 @@ class User extends DbModel implements UserInterface, DataBaseModelInterface
     public int $access_level = self::ACCESS_LEVEL_GUEST;
     public ?string $rescue_token = null;
     public int $status = self::STATUS_NOT_ACTIVATED;
+    public int $number_of_failed_login = 0;
+    public ?string $datetime_of_unblocking = null;
 
     public static function getUserByLogin(string $login): ?self
     {
@@ -137,7 +141,7 @@ class User extends DbModel implements UserInterface, DataBaseModelInterface
     }
 
     /**
-     * @param integer $lifetime token lifetime in minuts
+     * @param integer $lifetime token lifetime in minutes
      */
     public function generateToken(int $lifetime = 0): string
     {
@@ -312,5 +316,57 @@ class User extends DbModel implements UserInterface, DataBaseModelInterface
     public function isEnabled(): bool
     {
         return (static::STATUS_ENABLED === $this->status);
+    }
+
+    public function incFailedLogin()
+    {
+        $this->number_of_failed_login += 1;
+        $this->save();
+    }
+
+    public function countFailedLogin(): int
+    {
+        return $this->number_of_failed_login;
+    }
+
+    public function isUnblocked(int $attempts_before_blocking = 3): bool
+    {
+        if ($this->number_of_failed_login < $attempts_before_blocking) {
+            return true;
+        }
+
+        if (empty($this->datetime_of_unblocking)) {
+            return false;
+        }
+
+        $current = new \DateTime();
+        $unblock = \DateTime::createFromFormat('Y-m-d H:i:s', $this->datetime_of_unblocking);
+
+        return ($current > $unblock);
+    }
+
+    public function block(int $minutes = 15)
+    {
+        $blocking_datetime = new \DateTime();
+        $blocking_datetime->add(\DateInterval::createFromDateString("+{$minutes} minutes"));
+
+        $this->datetime_of_unblocking = $blocking_datetime->format('Y-m-d H:i:s');
+        $this->save();
+    }
+
+    public function unblock()
+    {
+        $this->number_of_failed_login = 0;
+        $this->datetime_of_unblocking = null;
+        $this->save();
+    }
+
+    public function tryBlock(int $attempts_before_blocking, int $minutes)
+    {
+        $this->incFailedLogin();
+
+        if ($this->countFailedLogin() >= $attempts_before_blocking) {
+            $this->block(15);
+        }
     }
 }
