@@ -98,6 +98,9 @@ class DataBase
      */
     public function execQuery(string $query_string, array $fields = []): bool
     {
+        Core::debug($query_string);
+        Core::debug('query_params: ' . print_r($fields, true));
+
         $query = $this->connection->prepare($query_string);
 
         if (!empty($fields)) {
